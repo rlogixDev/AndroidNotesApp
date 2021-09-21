@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/splash_screen">
+
+    <fragment
+        android:id="@+id/home"
+        android:name="com.noteapp.HomeFragment"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/home_to_note_details"
+            app:destination="@id/noteDetails"/>
+        <action
+            android:id="@+id/home_to_edit_note"
+            app:destination="@id/editNote"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/splash_screen"
+        android:name="com.noteapp.SplashFragment"
+        tools:layout="@layout/activity_splash">
+
+        <action
+            android:id="@+id/splash_to_sign_in"
+            app:destination="@id/signIn"/>
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/noteDetails"
+        android:name="com.noteapp.NoteDetailsFragment"
+        tools:layout="@layout/fragment_note_details">
+        <action
+            android:id="@+id/note_details_to_home"
+            app:destination="@id/home"/>
+        <action
+            android:id="@+id/note_details_to_edit_note"
+            app:destination="@id/editNote"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/signIn"
+        android:name="com.noteapp.SignInFragment"
+        tools:layout="@layout/fragment_sign_in">
+        <action
+            android:id="@+id/sign_in_to_sign_up"
+            app:destination="@id/signUp"/>
+        <action
+            android:id="@+id/sign_in_to_home"
+            app:destination="@id/home"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/signUp"
+        android:name="com.noteapp.SignUpFragment"
+        tools:layout="@layout/fragment_sign_up">
+        <action
+            android:id="@+id/sign_up_to_sign_in"
+            app:destination="@id/signIn"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/editNote"
+        android:name="com.noteapp.EditNoteFragment"
+        tools:layout="@layout/fragment_edit_note">
+        <action
+            android:id="@+id/edit_note_to_note_details"
+            app:destination="@id/noteDetails"/>
+    </fragment>
+
+</navigation>
