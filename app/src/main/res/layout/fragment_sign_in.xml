@@ -122,43 +122,43 @@
         android:paddingTop="10dp"
         android:layout_marginEnd="30dp"/>
 
-    <ImageButton
-        android:id="@+id/ib_finger_print"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_fingerprint_60"
-        app:layout_constraintTop_toBottomOf="@id/sign_in_forgot_password"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="100dp"
-        app:layout_constraintRight_toRightOf="parent"/>
+<!--    <ImageButton-->
+<!--        android:id="@+id/ib_finger_print"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:src="@drawable/ic_baseline_fingerprint_60"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/sign_in_forgot_password"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:layout_marginEnd="100dp"-->
+<!--        app:layout_constraintRight_toRightOf="parent"/>-->
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Finger Print"
-        app:layout_constraintTop_toBottomOf="@id/ib_finger_print"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="105dp"
-        app:layout_constraintRight_toRightOf="parent"/>
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Finger Print"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/ib_finger_print"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout_marginEnd="105dp"-->
+<!--        app:layout_constraintRight_toRightOf="parent"/>-->
 
-    <ImageButton
-        android:id="@+id/ib_face_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_face_60"
-        app:layout_constraintTop_toBottomOf="@id/sign_in_otp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="100dp"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_face_60"
-        android:text="Face Id"
-        app:layout_constraintTop_toBottomOf="@id/ib_face_id"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="120dp"/>
+<!--    <ImageButton-->
+<!--        android:id="@+id/ib_face_id"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:src="@drawable/ic_baseline_face_60"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/sign_in_otp"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:layout_marginStart="100dp"/>-->
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:src="@drawable/ic_baseline_face_60"-->
+<!--        android:text="Face Id"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/ib_face_id"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout_marginStart="120dp"/>-->
 
     <TextView
         android:id="@+id/createNewAcc"
@@ -166,10 +166,11 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_baseline_face_60"
         android:text="Do not have an account? Sign Up!"
-        app:layout_constraintTop_toBottomOf="@id/ib_face_id"
+        android:textColor="@color/purple_700"
         app:layout_constraintLeft_toLeftOf="@id/btnSignIn"
         app:layout_constraintRight_toRightOf="@id/btnSignIn"
-        android:layout_marginTop="40dp"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="40dp"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
