@@ -39,5 +39,17 @@ class SignInFragment : Fragment() {
         btnSignIn.setOnClickListener {
             view.findNavController().navigate(SignInFragmentDirections.signInToHome())
         }
+
+        //Forgot Password Page
+        val sign_in_forgot_password = view.findViewById<TextView>(R.id.sign_in_forgot_password)
+        sign_in_forgot_password.setOnClickListener {
+            view.findNavController().navigate(SignInFragmentDirections.signInToForgotPassword())
+        }
+
+        //OTP Sign In Page
+        val sign_in_otp = view.findViewById<TextView>(R.id.sign_in_otp)
+        sign_in_otp.setOnClickListener {
+            view.findNavController().navigate(SignInFragmentDirections.signInToOtpSignIn())
+        }
     }
 }

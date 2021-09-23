@@ -51,6 +51,12 @@
         <action
             android:id="@+id/sign_in_to_home"
             app:destination="@id/home"/>
+        <action
+            android:id="@+id/sign_in_to_forgot_password"
+            app:destination="@id/forgotPassword"/>
+        <action
+            android:id="@+id/sign_in_to_otp_sign_in"
+            app:destination="@id/otpSignIn"/>
     </fragment>
 
     <fragment
@@ -69,6 +75,23 @@
         <action
             android:id="@+id/edit_note_to_note_details"
             app:destination="@id/noteDetails"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/forgotPassword"
+        android:name="com.noteapp.ForgotPasswordFragment"
+        tools:layout="@layout/fragment_forgot_password">
+    <action
+        android:id="@+id/forgot_password_to_sign_in"
+        app:destination="@id/signIn"/>
+    </fragment>
+    <fragment
+        android:id="@+id/otpSignIn"
+        android:name="com.noteapp.OtpSignInFragment"
+        tools:layout="@layout/fragment_otp_sign_in">
+    <action
+        android:id="@+id/otp_sign_in_to_home"
+        app:destination="@id/home"/>
     </fragment>
 
 </navigation>
