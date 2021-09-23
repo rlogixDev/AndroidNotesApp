@@ -9,7 +9,9 @@ import android.widget.Toast
 import androidx.navigation.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.noteapp.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

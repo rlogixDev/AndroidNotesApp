@@ -8,7 +8,9 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.navigation.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SignInFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +40,18 @@ class SignInFragment : Fragment() {
         val btnSignIn = view.findViewById<Button>(R.id.btnSignIn)
         btnSignIn.setOnClickListener {
             view.findNavController().navigate(SignInFragmentDirections.signInToHome())
+        }
+
+        //Forgot Password Page
+        val sign_in_forgot_password = view.findViewById<TextView>(R.id.sign_in_forgot_password)
+        sign_in_forgot_password.setOnClickListener {
+            view.findNavController().navigate(SignInFragmentDirections.signInToForgotPassword())
+        }
+
+        //OTP Sign In Page
+        val sign_in_otp = view.findViewById<TextView>(R.id.sign_in_otp)
+        sign_in_otp.setOnClickListener {
+            view.findNavController().navigate(SignInFragmentDirections.signInToOtpSignIn())
         }
     }
 }
