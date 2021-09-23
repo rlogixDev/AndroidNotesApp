@@ -10,7 +10,9 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class OtpSignInFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

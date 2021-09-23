@@ -8,7 +8,9 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.navigation.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SignInFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
