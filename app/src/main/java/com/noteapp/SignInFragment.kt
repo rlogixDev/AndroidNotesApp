@@ -5,13 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.noteapp.authentication.IFirebaseAuthenticationManager
+import com.noteapp.authentication.Result
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SignInFragment : Fragment() {
+    @Inject
+    lateinit var firebaseAuthenticationManager : IFirebaseAuthenticationManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +38,8 @@ class SignInFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val email_mobile = view.findViewById<EditText>(R.id.email_mobile)
+        val sign_in_password = view.findViewById<EditText>(R.id.sign_in_password)
 
         //Sign Up Page
         val createNewAcc = view.findViewById<TextView>(R.id.createNewAcc)
@@ -39,7 +50,18 @@ class SignInFragment : Fragment() {
         //Home Page
         val btnSignIn = view.findViewById<Button>(R.id.btnSignIn)
         btnSignIn.setOnClickListener {
-            view.findNavController().navigate(SignInFragmentDirections.signInToHome())
+            lifecycleScope.launchWhenStarted {
+                firebaseAuthenticationManager.login(email_mobile.text.toString(), sign_in_password.text.toString()).collect {result->
+                    when(result){
+                        Result.SUCCESS-> {
+
+                            view.findNavController().navigate(SignInFragmentDirections.signInToHome())
+                        }
+                        Result.FAIL-> Toast.makeText(context, "Invalid username and password", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+
         }
 
         //Forgot Password Page
