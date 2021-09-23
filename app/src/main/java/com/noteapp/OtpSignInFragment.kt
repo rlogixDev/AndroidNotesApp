@@ -1,6 +1,7 @@
 package com.noteapp
 
 import android.os.Bundle
+import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -33,19 +34,34 @@ class OtpSignInFragment : Fragment() {
         val tvOtp = view.findViewById<TextView>(R.id.tvOtp)
         val etOtp = view.findViewById<EditText>(R.id.etOtp)
         val btnOtpSignIn = view.findViewById<Button>(R.id.btnOtpSignIn)
+        val etForgotPassword = view.findViewById<EditText>(R.id.etForgotPassword)
+
+        fun CharSequence.isValidEmail() = isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(this,).matches()
 
         btnSendOtp.setOnClickListener {
-            tvOtp.visibility = View.VISIBLE
-            etOtp.visibility = View.VISIBLE
-            btnOtpSignIn.visibility = View.VISIBLE
-            btnSendOtp.text = "RESEND OTP"
+            if (etForgotPassword.text.isValidEmail()) {
 
-            Toast.makeText(context, "OTP Sent!", Toast.LENGTH_LONG).show()
+                tvOtp.visibility = View.VISIBLE
+                etOtp.visibility = View.VISIBLE
+                btnOtpSignIn.visibility = View.VISIBLE
+                btnSendOtp.text = "RESEND OTP"
+
+                Toast.makeText(context, "OTP Sent!", Toast.LENGTH_LONG).show()
+
+            } else {
+                Toast.makeText(context, "Please enter a valid email address", Toast.LENGTH_LONG).show()
+            }
         }
 
         //Home Page
         btnOtpSignIn.setOnClickListener {
-            view.findNavController().navigate(OtpSignInFragmentDirections.otpSignInToHome())
+            if (etOtp.text.isNotEmpty()) {
+
+                view.findNavController().navigate(OtpSignInFragmentDirections.otpSignInToHome())
+
+            } else {
+                Toast.makeText(context, "Please enter a valid OTP", Toast.LENGTH_LONG).show()
+            }
         }
     }
 }

@@ -15,7 +15,7 @@
         android:layout_marginTop="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/name_sign_up"
@@ -28,7 +28,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="10dp"
-        android:paddingBottom="20dp"/>
+        android:paddingBottom="20dp" />
 
 <!--    User-->
     <EditText
@@ -36,10 +36,11 @@
         android:layout_width="230dp"
         android:layout_height="wrap_content"
         android:hint="Username"
+        android:inputType="text"
         android:layout_marginStart="10dp"
         android:textColor="@color/purple_700"
         app:layout_constraintTop_toBottomOf="@id/name_sign_up"
-        app:layout_constraintLeft_toRightOf="@id/ivPerson"/>
+        app:layout_constraintLeft_toRightOf="@id/ivPerson" />
     <ImageView
         android:id="@+id/ivPerson"
         android:layout_width="wrap_content"
@@ -57,7 +58,7 @@
         android:layout_marginStart="10dp"
         app:layout_constraintLeft_toRightOf="@id/name"
         app:layout_constraintTop_toTopOf="@id/name"
-        app:layout_constraintBottom_toBottomOf="@id/name"/>
+        app:layout_constraintBottom_toBottomOf="@id/name" />
 
 <!--    Password-->
     <EditText
@@ -65,10 +66,11 @@
         android:layout_width="330dp"
         android:layout_height="wrap_content"
         android:hint="Password"
+        android:inputType="textPassword"
         android:layout_marginStart="10dp"
         android:textColor="@color/purple_700"
         app:layout_constraintTop_toBottomOf="@id/name"
-        app:layout_constraintLeft_toRightOf="@id/ivPassword"/>
+        app:layout_constraintLeft_toRightOf="@id/ivPassword" />
     <ImageView
         android:id="@+id/ivPassword"
         android:layout_width="wrap_content"
@@ -78,7 +80,7 @@
         app:layout_constraintTop_toBottomOf="@id/name"
         app:layout_constraintBottom_toTopOf="@id/birthDate"
         app:layout_constraintRight_toLeftOf="@id/password"
-        app:layout_constraintLeft_toLeftOf="parent"/>
+        app:layout_constraintLeft_toLeftOf="parent" />
 
 <!--    Birth Date-->
     <EditText
@@ -86,10 +88,11 @@
         android:layout_width="330dp"
         android:layout_height="wrap_content"
         android:hint="Birth Date"
+        android:inputType="date"
         android:layout_marginStart="10dp"
         android:textColor="@color/purple_700"
         app:layout_constraintTop_toBottomOf="@id/password"
-        app:layout_constraintLeft_toRightOf="@id/ivBirthDate"/>
+        app:layout_constraintLeft_toRightOf="@id/ivBirthDate" />
     <ImageView
         android:id="@+id/ivBirthDate"
         android:layout_width="wrap_content"
@@ -99,7 +102,7 @@
         app:layout_constraintTop_toBottomOf="@id/password"
         app:layout_constraintBottom_toTopOf="@id/mobile"
         app:layout_constraintRight_toLeftOf="@id/birthDate"
-        app:layout_constraintLeft_toLeftOf="parent"/>
+        app:layout_constraintLeft_toLeftOf="parent" />
 
 <!--    Mobile-->
     <EditText
@@ -107,10 +110,11 @@
         android:layout_width="330dp"
         android:layout_height="wrap_content"
         android:hint="Mobile"
+        android:inputType="number"
         android:layout_marginStart="10dp"
         android:textColor="@color/purple_700"
         app:layout_constraintTop_toBottomOf="@id/birthDate"
-        app:layout_constraintLeft_toRightOf="@id/ivMobile"/>
+        app:layout_constraintLeft_toRightOf="@id/ivMobile" />
     <ImageView
         android:id="@+id/ivMobile"
         android:layout_width="wrap_content"
@@ -131,7 +135,7 @@
         android:layout_marginStart="10dp"
         android:textColor="@color/purple_700"
         app:layout_constraintTop_toBottomOf="@id/mobile"
-        app:layout_constraintLeft_toRightOf="@id/ivFirstName"/>
+        app:layout_constraintLeft_toRightOf="@id/ivFirstName" />
     <ImageView
         android:id="@+id/ivFirstName"
         android:layout_width="wrap_content"
@@ -139,9 +143,9 @@
         android:layout_marginStart="20dp"
         android:src="@drawable/ic_baseline_person_20"
         app:layout_constraintTop_toBottomOf="@id/mobile"
-        app:layout_constraintBottom_toTopOf="@id/tvGender"
+        app:layout_constraintBottom_toTopOf="@id/rbGenderFemale"
         app:layout_constraintRight_toLeftOf="@id/firstName"
-        app:layout_constraintLeft_toLeftOf="parent"/>
+        app:layout_constraintLeft_toLeftOf="parent" />
 
 <!--    Gender-->
     <ImageView
@@ -153,7 +157,7 @@
         app:layout_constraintTop_toBottomOf="@id/ivFirstName"
         app:layout_constraintBottom_toTopOf="@id/ivEmailId"
         app:layout_constraintRight_toLeftOf="@id/tvGender"
-        app:layout_constraintLeft_toLeftOf="parent"/>
+        app:layout_constraintLeft_toLeftOf="parent" />
     <TextView
         android:id="@+id/tvGender"
         android:layout_width="wrap_content"
@@ -164,7 +168,7 @@
         android:layout_marginStart="20dp"
         app:layout_constraintTop_toBottomOf="@id/firstName"
         app:layout_constraintBottom_toTopOf="@id/emailId"
-        app:layout_constraintLeft_toRightOf="@id/ivGender"/>
+        app:layout_constraintLeft_toRightOf="@id/ivGender" />
     <RadioButton
         android:text="Female"
         android:textSize="17sp"
@@ -203,10 +207,11 @@
         android:layout_width="330dp"
         android:layout_height="wrap_content"
         android:hint="Email ID"
+        android:inputType="textEmailAddress"
         android:layout_marginStart="10dp"
         android:textColor="@color/purple_700"
         app:layout_constraintTop_toBottomOf="@id/rbGenderFemale"
-        app:layout_constraintLeft_toRightOf="@id/ivEmailId"/>
+        app:layout_constraintLeft_toRightOf="@id/ivEmailId" />
     <ImageView
         android:id="@+id/ivEmailId"
         android:layout_width="wrap_content"
@@ -216,7 +221,7 @@
         app:layout_constraintTop_toBottomOf="@id/rbGenderFemale"
         app:layout_constraintBottom_toTopOf="@id/country"
         app:layout_constraintRight_toLeftOf="@id/emailId"
-        app:layout_constraintLeft_toLeftOf="parent"/>
+        app:layout_constraintLeft_toLeftOf="parent" />
 
 <!--    Country-->
     <EditText
@@ -227,7 +232,7 @@
         android:layout_marginStart="10dp"
         android:textColor="@color/purple_700"
         app:layout_constraintTop_toBottomOf="@id/emailId"
-        app:layout_constraintLeft_toRightOf="@id/ivCountry"/>
+        app:layout_constraintLeft_toRightOf="@id/ivCountry" />
     <ImageView
         android:id="@+id/ivCountry"
         android:layout_width="wrap_content"
@@ -237,7 +242,7 @@
         app:layout_constraintTop_toBottomOf="@id/emailId"
         app:layout_constraintBottom_toTopOf="@id/zipCode"
         app:layout_constraintRight_toLeftOf="@id/country"
-        app:layout_constraintLeft_toLeftOf="parent"/>
+        app:layout_constraintLeft_toLeftOf="parent" />
 
 <!--    ZipCode-->
     <EditText
@@ -245,10 +250,11 @@
         android:layout_width="330dp"
         android:layout_height="wrap_content"
         android:hint="Zip Code"
+        android:inputType="number"
         android:layout_marginStart="10dp"
         android:textColor="@color/purple_700"
         app:layout_constraintTop_toBottomOf="@id/country"
-        app:layout_constraintLeft_toRightOf="@id/ivZipCode"/>
+        app:layout_constraintLeft_toRightOf="@id/ivZipCode" />
     <ImageView
         android:id="@+id/ivZipCode"
         android:layout_width="wrap_content"
@@ -258,7 +264,7 @@
         app:layout_constraintTop_toBottomOf="@id/country"
         app:layout_constraintBottom_toTopOf="@id/state"
         app:layout_constraintRight_toLeftOf="@id/zipCode"
-        app:layout_constraintLeft_toLeftOf="parent"/>
+        app:layout_constraintLeft_toLeftOf="parent" />
 
 <!--    State-->
     <EditText
@@ -269,7 +275,7 @@
         android:layout_marginStart="10dp"
         android:textColor="@color/purple_700"
         app:layout_constraintTop_toBottomOf="@id/zipCode"
-        app:layout_constraintLeft_toRightOf="@id/ivState"/>
+        app:layout_constraintLeft_toRightOf="@id/ivState" />
     <ImageView
         android:id="@+id/ivState"
         android:layout_width="wrap_content"
@@ -279,7 +285,7 @@
         app:layout_constraintTop_toBottomOf="@id/zipCode"
         app:layout_constraintBottom_toTopOf="@id/city"
         app:layout_constraintRight_toLeftOf="@id/state"
-        app:layout_constraintLeft_toLeftOf="parent"/>
+        app:layout_constraintLeft_toLeftOf="parent" />
 
 <!--    City-->
     <EditText
@@ -290,7 +296,7 @@
         android:layout_marginStart="10dp"
         android:textColor="@color/purple_700"
         app:layout_constraintTop_toBottomOf="@id/state"
-        app:layout_constraintLeft_toRightOf="@id/ivCity"/>
+        app:layout_constraintLeft_toRightOf="@id/ivCity" />
     <ImageView
         android:id="@+id/ivCity"
         android:layout_width="wrap_content"
@@ -300,7 +306,7 @@
         app:layout_constraintTop_toBottomOf="@id/state"
         app:layout_constraintBottom_toTopOf="@id/googleId"
         app:layout_constraintRight_toLeftOf="@id/city"
-        app:layout_constraintLeft_toLeftOf="parent"/>
+        app:layout_constraintLeft_toLeftOf="parent" />
 
 <!--    Google ID-->
     <EditText
@@ -308,10 +314,11 @@
         android:layout_width="330dp"
         android:layout_height="wrap_content"
         android:hint="Google ID"
+        android:inputType="textEmailAddress"
         android:layout_marginStart="10dp"
         android:textColor="@color/purple_700"
         app:layout_constraintTop_toBottomOf="@id/city"
-        app:layout_constraintLeft_toRightOf="@id/ivGoogleId"/>
+        app:layout_constraintLeft_toRightOf="@id/ivGoogleId" />
     <ImageView
         android:id="@+id/ivGoogleId"
         android:layout_width="wrap_content"
@@ -321,7 +328,7 @@
         app:layout_constraintTop_toBottomOf="@id/city"
         app:layout_constraintBottom_toTopOf="@id/btnSignUp"
         app:layout_constraintRight_toLeftOf="@id/googleId"
-        app:layout_constraintLeft_toLeftOf="parent"/>
+        app:layout_constraintLeft_toLeftOf="parent" />
 
 <!--    Save-->
     <Button
