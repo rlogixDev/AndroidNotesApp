@@ -33,7 +33,7 @@ class HomeFragment : Fragment() {
         val createNewNote = view.findViewById<FloatingActionButton>(R.id.createNewNote)
         createNewNote.setOnClickListener {
 //            Toast.makeText(context, "Account successfully created", Toast.LENGTH_LONG).show()
-            view.findNavController().navigate(HomeFragmentDirections.homeToEditNote())
+            view.findNavController().navigate(HomeFragmentDirections.homeToNoteDetails())
         }
         //Note Details
 //        val btnSignUp = view.findViewById<Button>(R.id.btnSignUp)
