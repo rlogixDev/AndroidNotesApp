@@ -12,6 +12,7 @@ import androidx.navigation.findNavController
 import com.noteapp.authentication.FirebaseAuthenticationManager
 import com.noteapp.authentication.IFirebaseAuthenticationManager
 import com.noteapp.authentication.Result
+import com.test.notes.AlertDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
@@ -39,6 +40,13 @@ class SignUpFragment : Fragment() {
         val password = view.findViewById<EditText>(R.id.password)
 
         //Sign In Page
+        val firstButtonClick: () -> Unit = { ->
+            Toast.makeText(context, "Unable to create account", Toast.LENGTH_SHORT).show()
+        }
+
+        val secondButtonClick: () -> Unit = { ->
+            Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
+        }
         val btnCheck = view.findViewById<Button>(R.id.btnCheck)
         val btnSignUp = view.findViewById<Button>(R.id.btnSignUp)
         btnCheck.setOnClickListener {
@@ -49,7 +57,13 @@ class SignUpFragment : Fragment() {
                             Toast.makeText(context, "Account created successfully", Toast.LENGTH_LONG).show()
                             view.findNavController().popBackStack()
                         }
-                        Result.FAIL->Toast.makeText(context, "Unable to create account", Toast.LENGTH_LONG).show()
+                        Result.FAIL->{
+                            AlertDialogFragment(
+                                "Alert!", "Unable to create account", "OK",
+                                "", firstButtonClick, secondButtonClick
+                            ).show(requireActivity().supportFragmentManager, "AlertDialogFragment")
+                        }
+                    /*Toast.makeText(context, "Unable to create account", Toast.LENGTH_LONG).show()*/
                     }
                 }
             }
