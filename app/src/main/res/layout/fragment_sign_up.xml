@@ -28,7 +28,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="10dp"
-        android:paddingBottom="20dp" />
+        android:paddingBottom="10dp" />
 
 <!--    User-->
     <EditText
@@ -93,6 +93,17 @@
         android:textColor="@color/purple_700"
         app:layout_constraintTop_toBottomOf="@id/password"
         app:layout_constraintLeft_toRightOf="@id/ivBirthDate" />
+
+    <DatePicker
+        android:id="@+id/dpBirthDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:datePickerMode="spinner"
+        android:calendarViewShown="false"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
     <ImageView
         android:id="@+id/ivBirthDate"
         android:layout_width="wrap_content"
@@ -143,7 +154,7 @@
         android:layout_marginStart="20dp"
         android:src="@drawable/ic_baseline_person_20"
         app:layout_constraintTop_toBottomOf="@id/mobile"
-        app:layout_constraintBottom_toTopOf="@id/rbGenderFemale"
+        app:layout_constraintBottom_toTopOf="@id/rgGender"
         app:layout_constraintRight_toLeftOf="@id/firstName"
         app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -165,41 +176,54 @@
         android:text="Gender:"
         android:textSize="17sp"
         android:textColor="#808080"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="10dp"
         app:layout_constraintTop_toBottomOf="@id/firstName"
         app:layout_constraintBottom_toTopOf="@id/emailId"
         app:layout_constraintLeft_toRightOf="@id/ivGender" />
-    <RadioButton
-        android:text="Female"
-        android:textSize="17sp"
-        android:textColor="#808080"
-        android:id="@+id/rbGenderFemale"
+
+    <RadioGroup
+        android:id="@+id/rgGender"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        app:layout_constraintTop_toBottomOf="@id/firstName"
-        app:layout_constraintRight_toLeftOf="@id/rbGenderMale"
-        app:layout_constraintLeft_toRightOf="@id/tvGender" />
-    <RadioButton
-        android:text="Male"
-        android:textSize="17sp"
-        android:textColor="#808080"
-        android:id="@+id/rbGenderMale"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        app:layout_constraintTop_toTopOf="@id/rbGenderFemale"
-        app:layout_constraintLeft_toRightOf="@id/rbGenderFemale" />
-    <RadioButton
-        android:text="Other"
-        android:textSize="17sp"
-        android:textColor="#808080"
-        android:id="@+id/rbGenderOther"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        app:layout_constraintTop_toTopOf="@id/rbGenderMale"
-        app:layout_constraintLeft_toRightOf="@id/rbGenderMale" />
+        android:orientation="horizontal"
+
+        app:layout_constraintLeft_toRightOf="@id/tvGender"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/firstName">
+
+
+        <RadioButton
+            android:text="Female"
+            android:textSize="17sp"
+            android:textColor="#808080"
+            android:id="@+id/rbGenderFemale"
+            android:checked="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/firstName"
+            app:layout_constraintRight_toLeftOf="@id/rbGenderMale"
+            app:layout_constraintLeft_toRightOf="@id/tvGender" />
+        <RadioButton
+            android:text="Male"
+            android:textSize="17sp"
+            android:textColor="#808080"
+            android:id="@+id/rbGenderMale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/rbGenderFemale"
+            app:layout_constraintLeft_toRightOf="@id/rbGenderFemale" />
+        <RadioButton
+            android:text="Other"
+            android:textSize="17sp"
+            android:textColor="#808080"
+            android:id="@+id/rbGenderOther"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/rbGenderMale"
+            app:layout_constraintLeft_toRightOf="@id/rbGenderMale" />
+
+    </RadioGroup>
+
 
 <!--    EmailID-->
     <EditText
@@ -210,7 +234,7 @@
         android:inputType="textEmailAddress"
         android:layout_marginStart="10dp"
         android:textColor="@color/purple_700"
-        app:layout_constraintTop_toBottomOf="@id/rbGenderFemale"
+        app:layout_constraintTop_toBottomOf="@id/rgGender"
         app:layout_constraintLeft_toRightOf="@id/ivEmailId" />
     <ImageView
         android:id="@+id/ivEmailId"
@@ -218,7 +242,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:src="@drawable/ic_baseline_mail_outline_20"
-        app:layout_constraintTop_toBottomOf="@id/rbGenderFemale"
+        app:layout_constraintTop_toBottomOf="@id/rgGender"
         app:layout_constraintBottom_toTopOf="@id/country"
         app:layout_constraintRight_toLeftOf="@id/emailId"
         app:layout_constraintLeft_toLeftOf="parent" />
