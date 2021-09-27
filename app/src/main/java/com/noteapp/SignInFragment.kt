@@ -13,6 +13,7 @@ import androidx.navigation.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.noteapp.authentication.IFirebaseAuthenticationManager
 import com.noteapp.authentication.Result
+import com.test.notes.AlertDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
@@ -41,6 +42,7 @@ class SignInFragment : Fragment() {
         val email_mobile = view.findViewById<EditText>(R.id.email_mobile)
         val sign_in_password = view.findViewById<EditText>(R.id.sign_in_password)
 
+
         //Sign Up Page
         val createNewAcc = view.findViewById<TextView>(R.id.createNewAcc)
         createNewAcc.setOnClickListener {
@@ -49,6 +51,13 @@ class SignInFragment : Fragment() {
 
         //Home Page
         val btnSignIn = view.findViewById<Button>(R.id.btnSignIn)
+        val firstButtonClick: () -> Unit = { ->
+            Toast.makeText(context, "Invalid email or password", Toast.LENGTH_SHORT).show()
+        }
+
+        val secondButtonClick: () -> Unit = { ->
+            Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
+        }
         btnSignIn.setOnClickListener {
             lifecycleScope.launchWhenStarted {
                 firebaseAuthenticationManager.login(email_mobile.text.toString(), sign_in_password.text.toString()).collect {result->
@@ -57,7 +66,13 @@ class SignInFragment : Fragment() {
 
                             view.findNavController().navigate(SignInFragmentDirections.signInToHome())
                         }
-                        Result.FAIL-> Toast.makeText(context, "Invalid username and password", Toast.LENGTH_LONG).show()
+                        Result.FAIL-> {
+                            AlertDialogFragment(
+                                "Alert!", "Invalid email or password", "OK",
+                                "", firstButtonClick, secondButtonClick
+                            ).show(requireActivity().supportFragmentManager, "AlertDialogFragment")
+                        }
+                        /*Toast.makeText(context, "Invalid username and password", Toast.LENGTH_LONG).show()*/
                     }
                 }
             }
