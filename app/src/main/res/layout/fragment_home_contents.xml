@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="20dp">
 
+
     <ImageView
         android:id="@+id/ivImage"
         android:layout_width="wrap_content"
@@ -25,6 +26,7 @@
         android:textColor="@color/purple_700"
         app:layout_constraintLeft_toRightOf="@id/ivImage"
         app:layout_constraintTop_toTopOf="@id/ivImage" />
+
 
     <CheckBox
         android:layout_width="wrap_content"

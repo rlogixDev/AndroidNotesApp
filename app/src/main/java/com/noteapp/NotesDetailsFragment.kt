@@ -24,7 +24,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @AndroidEntryPoint
-class NoteDetailsFragment : Fragment() {
+class NotesDetailsFragment : Fragment() {
 
     val noteDetailViewModel: NoteDetailViewModel by viewModels()
     private lateinit var photoFile: File
@@ -57,13 +57,13 @@ class NoteDetailsFragment : Fragment() {
 
         btnNoteDetails.setOnClickListener {
 //            Toast.makeText(context, "Account successfully created", Toast.LENGTH_LONG).show()
-            view.findNavController().navigate(NoteDetailsFragmentDirections.noteDetailsToEditNote())
+            //view.findNavController().navigate(NoteDetailsFragmentDirections.noteDetailsToEditNote())
         }
         //Home Page
         val logoNoteDetails = view.findViewById<ImageView>(R.id.logoNoteDetails)
         logoNoteDetails.setOnClickListener {
 //            Toast.makeText(context, "Account successfully created", Toast.LENGTH_LONG).show()
-            view.findNavController().navigate(NoteDetailsFragmentDirections.noteDetailsToHome())
+            //view.findNavController().navigate(NoteDetailsFragmentDirections.noteDetailsToHome())
         }
     }
 
