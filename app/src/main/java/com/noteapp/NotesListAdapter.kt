@@ -17,13 +17,14 @@ class NotesListAdapter(private val dataSet: List<Notes>,
         //var ivImage: ImageView? = null
         var tvTitle: TextView? = null
         var tvDetails: TextView? = null
+        var tvDay: TextView? = null
         //val myImage: Drawable? = ResourcesCompat.getDrawable(context.resources, R.drawable.ic_baseline_image_60_purple, null)
 
 
         init {
             tvTitle = itemView.findViewById(R.id.tvTitle)
             tvDetails = itemView.findViewById(R.id.tvDetails)
-            //ivImage = itemView.findViewById(R.id.ivImage)
+            tvDay = itemView.findViewById(R.id.tvDay)
 
 
         }
@@ -44,6 +45,7 @@ class NotesListAdapter(private val dataSet: List<Notes>,
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.tvDay?.text = dataSet.get(position).day
         holder.tvDetails?.text = dataSet.get(position).details
         holder.tvTitle?.text = dataSet.get(position).title
     }
