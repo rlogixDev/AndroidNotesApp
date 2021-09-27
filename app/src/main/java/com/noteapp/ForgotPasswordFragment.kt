@@ -42,8 +42,7 @@ class ForgotPasswordFragment : Fragment() {
                 view.findNavController().navigate(ForgotPasswordFragmentDirections.forgotPasswordToSignIn())
             }
         } else {
-            etForgotPassword.text = null
-            etForgotPassword.hint = "Invalid email!"
+            etForgotPassword.error = "Invalid email!"
         }
 
     }

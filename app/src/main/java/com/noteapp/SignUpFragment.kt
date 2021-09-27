@@ -32,9 +32,7 @@ class SignUpFragment : Fragment() {
         fun CharSequence.isValidEmail() = isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(this,).matches()
         fun CharSequence.isValidMobile() = isNotEmpty() && Patterns.PHONE.matcher(this,).matches()
 
-//        val dateSetListner
-
-
+        //Birth Date Input
         val birthDate = view.findViewById<EditText>(R.id.birthDate)
         val calendar = Calendar.getInstance()
         

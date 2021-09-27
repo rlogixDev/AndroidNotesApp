@@ -49,18 +49,17 @@ class OtpSignInFragment : Fragment() {
                 Toast.makeText(context, "OTP Sent!", Toast.LENGTH_LONG).show()
 
             } else {
-                Toast.makeText(context, "Please enter a valid email address", Toast.LENGTH_LONG).show()
+                etForgotPassword.error = "Invalid email!"
             }
         }
 
         //Home Page
         btnOtpSignIn.setOnClickListener {
             if (etOtp.text.isNotEmpty()) {
-
                 view.findNavController().navigate(OtpSignInFragmentDirections.otpSignInToHome())
 
             } else {
-                Toast.makeText(context, "Please enter a valid OTP", Toast.LENGTH_LONG).show()
+                etOtp.error = "Invalid OTP!"
             }
         }
     }
