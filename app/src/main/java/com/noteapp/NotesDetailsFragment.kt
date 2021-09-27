@@ -11,7 +11,7 @@ import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class NoteDetailsFragment : Fragment() {
+class NotesDetailsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,13 +33,13 @@ class NoteDetailsFragment : Fragment() {
         val btnNoteDetails = view.findViewById<Button>(R.id.btnNoteDetails)
         btnNoteDetails.setOnClickListener {
 //            Toast.makeText(context, "Account successfully created", Toast.LENGTH_LONG).show()
-            view.findNavController().navigate(NoteDetailsFragmentDirections.noteDetailsToEditNote())
+            //view.findNavController().navigate(NoteDetailsFragmentDirections.noteDetailsToEditNote())
         }
         //Home Page
         val logoNoteDetails = view.findViewById<ImageView>(R.id.logoNoteDetails)
         logoNoteDetails.setOnClickListener {
 //            Toast.makeText(context, "Account successfully created", Toast.LENGTH_LONG).show()
-            view.findNavController().navigate(NoteDetailsFragmentDirections.noteDetailsToHome())
+            //view.findNavController().navigate(NoteDetailsFragmentDirections.noteDetailsToHome())
         }
     }
 
