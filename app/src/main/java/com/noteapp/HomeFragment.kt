@@ -69,7 +69,7 @@ class   HomeFragment : Fragment(R.layout.fragment_home), AdapterView.OnItemSelec
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
         // An item was selected. You can retrieve the selected item using
         // parent.getItemAtPosition(pos)
-        R.array.Sorting_Array
+
         
     }
 
