@@ -1,5 +1,8 @@
 package com.noteapp
 
+import dagger.hilt.android.AndroidEntryPoint
+
+
 data class User(val id: Int,
                 val userName: String,
                 val birthDate: String,

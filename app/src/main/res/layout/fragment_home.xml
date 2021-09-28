@@ -6,9 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".HomeFragment">
 
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="96dp"
+        android:layout_height="62dp"
+        android:layout_marginLeft="300dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/ic_sort"
+        >
+
+    </Spinner>
+
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvUserList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="100dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

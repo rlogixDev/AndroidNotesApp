@@ -7,12 +7,26 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import android.widget.*
 import androidx.core.text.isDigitsOnly
 import androidx.navigation.findNavController
+import com.noteapp.authentication.FirebaseAuthenticationManager
+import com.noteapp.authentication.IFirebaseAuthenticationManager
+import com.noteapp.authentication.Result
+import com.test.notes.AlertDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import javax.inject.Inject
 import java.util.*
 
+@AndroidEntryPoint
 class SignUpFragment : Fragment() {
+    @Inject
+    lateinit var firebaseAuthenticationManager : IFirebaseAuthenticationManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +42,8 @@ class SignUpFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val emailId = view.findViewById<EditText>(R.id.emailId)
+        val password = view.findViewById<EditText>(R.id.password)
 
         fun CharSequence.isValidEmail() = isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(this,).matches()
         fun CharSequence.isValidMobile() = isNotEmpty() && Patterns.PHONE.matcher(this,).matches()
@@ -35,7 +51,7 @@ class SignUpFragment : Fragment() {
         //Birth Date Input
         val birthDate = view.findViewById<EditText>(R.id.birthDate)
         val calendar = Calendar.getInstance()
-        
+
         birthDate.setOnClickListener {
             context?.let { it1 ->
                 DatePickerDialog(
@@ -49,7 +65,35 @@ class SignUpFragment : Fragment() {
         }
 
         //Sign In Page
+        val firstButtonClick: () -> Unit = { ->
+            Toast.makeText(context, "Unable to create account", Toast.LENGTH_SHORT).show()
+        }
+
+        val secondButtonClick: () -> Unit = { ->
+            Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
+        }
+        val btnCheck = view.findViewById<Button>(R.id.btnCheck)
         val btnSignUp = view.findViewById<Button>(R.id.btnSignUp)
+        btnCheck.setOnClickListener {
+            lifecycleScope.launchWhenStarted {
+                firebaseAuthenticationManager.createAccount(emailId.text.toString(), password.text.toString()).collect {result->
+                    when(result){
+                        Result.SUCCESS-> {
+                            Toast.makeText(context, "Account created successfully", Toast.LENGTH_LONG).show()
+                            view.findNavController().popBackStack()
+                        }
+                        Result.FAIL->{
+                            AlertDialogFragment(
+                                "Alert!", "Unable to create account", "OK",
+                                "", firstButtonClick, secondButtonClick
+                            ).show(requireActivity().supportFragmentManager, "AlertDialogFragment")
+                        }
+                    /*Toast.makeText(context, "Unable to create account", Toast.LENGTH_LONG).show()*/
+                    }
+                }
+            }
+
+
         val name = view.findViewById<EditText>(R.id.name)
         val password = view.findViewById<EditText>(R.id.password)
         val mobile = view.findViewById<EditText>(R.id.mobile)

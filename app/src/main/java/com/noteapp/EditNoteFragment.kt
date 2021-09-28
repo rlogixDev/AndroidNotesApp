@@ -9,7 +9,9 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.navigation.findNavController
 import com.noteapp.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class EditNoteFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
