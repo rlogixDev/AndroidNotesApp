@@ -43,10 +43,6 @@ class SignInFragment : Fragment() {
         val email_mobile = view.findViewById<EditText>(R.id.email_mobile)
         val sign_in_password = view.findViewById<EditText>(R.id.sign_in_password)
 
-
-        val email_mobile = view.findViewById<EditText>(R.id.email_mobile)
-        val sign_in_password = view.findViewById<EditText>(R.id.sign_in_password)
-
         fun CharSequence.isValidEmail() = isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(this,).matches()
         fun CharSequence.isValidMobile() = isNotEmpty() && Patterns.PHONE.matcher(this,).matches()
 
