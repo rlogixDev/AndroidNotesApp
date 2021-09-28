@@ -30,52 +30,49 @@ public class NotesListViewModel
     fun readNotesList():ArrayList<Notes> {
         val list: ArrayList<Notes> = ArrayList()
         list.add(
-            Notes(
-                "Dummy Note 1",
+            Notes("Today",
+                "A Dummy Note",
+                "The official Android IDE. Android Studio will help you develop your app in a " +
+                        "more productive way at scale. Android Studio provides the fastest tools for building apps on every Android device."
+            )
+        )
+        list.add(
+            Notes("Today",
+                " B Dummy Note ",
+                "The official Android IDE. Android Studio will help you develop your app in a " +
+                        "more productive way at scale. Android Studio provides the fastest tools for building apps on every Android device."
+            )
+        )
+        list.add(
+            Notes("Today",
+                "C Dummy Note ",
+                "The official Android IDE. Android Studio will help you develop your app in a " +
+                        "more productive way at scale. Android Studio provides the fastest tools for building apps on every Android device."
+            )
+        )
+        list.add(
+            Notes("Today",
+                " D Dummy Note ",
+                "The official Android IDE. Android Studio will help you develop your app in a " +
+                        "more productive way at scale. Android Studio provides the fastest tools for building apps on every Android device."
+            )
+        )
+        list.add(
+            Notes("Today",
+                "E Dummy Note ",
+                "The official Android IDE. Android Studio will help you develop your app in a " +
+                        "more productive way at scale. Android Studio provides the fastest tools for building apps on every Android device."
+            )
+        )
+        list.add(
+            Notes("Today",
+                "F Dummy Note ",
                 "The official Android IDE. Android Studio will help you develop your app in a " +
                         "more productive way at scale. Android Studio provides the fastest tools for building apps on every Android device."
             )
         )
 
-        list.add(
-            Notes(
-                "Dummy Note 2",
-                "The official Android IDE. Android Studio will help you develop your app in a " +
-                        "more productive way at scale. Android Studio provides the fastest tools for building apps on every Android device."
-            )
-        )
 
-        list.add(
-            Notes(
-                "Dummy Note 3",
-                "The official Android IDE. Android Studio will help you develop your app in a " +
-                        "more productive way at scale. Android Studio provides the fastest tools for building apps on every Android device."
-            )
-        )
-
-        list.add(
-            Notes(
-                "Dummy Note 4",
-                "The official Android IDE. Android Studio will help you develop your app in a " +
-                        "more productive way at scale. Android Studio provides the fastest tools for building apps on every Android device."
-            )
-        )
-
-        list.add(
-            Notes(
-                "Dummy Note 5",
-                "The official Android IDE. Android Studio will help you develop your app in a " +
-                        "more productive way at scale. Android Studio provides the fastest tools for building apps on every Android device."
-            )
-        )
-
-        list.add(
-            Notes(
-                "Dummy Note 6",
-                "The official Android IDE. Android Studio will help you develop your app in a " +
-                        "more productive way at scale. Android Studio provides the fastest tools for building apps on every Android device."
-            )
-        )
 
         notesListFlow.value = list
         return list
