@@ -53,7 +53,11 @@ class FirebaseStorageManager
             .child(firebaseAuthenticationManager.getUserId())
             .get()
             .addOnSuccessListener { snapShot->
-                result.value = DBReadResult.Success(snapShot.getValue() as Map<String, Notes>)
+                try {
+                    result.value = DBReadResult.Success(snapShot.getValue() as Map<String, Notes>)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
             .addOnFailureListener {
                 result.value = DBReadResult.Fail

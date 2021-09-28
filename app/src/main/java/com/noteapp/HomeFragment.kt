@@ -64,17 +64,19 @@ class   HomeFragment : Fragment() {
                 when(result) {
                     is DBReadResult.Success -> {
                         val list: ArrayList<Notes> = ArrayList()
-                        result.result.forEach { key, any ->
-                            val map = any as HashMap<String, String>
-                            val title = map["title"]?: ""
-                            val details = map["details"]?: ""
-                            val date = map["date"]?: ""
-                            val imagePath = map["imagePath"]?: ""
+                        if(result.result != null && result.result.size > 0) {
+                            result.result.forEach { key, any ->
+                                val map = any as HashMap<String, String>
+                                val title = map["title"]?: ""
+                                val details = map["details"]?: ""
+                                val date = map["date"]?: ""
+                                val imagePath = map["imagePath"]?: ""
 
-                            list.add(let { Notes(key, title, details, date, imagePath) })
+                                list.add(let { Notes(key, title, details, date, imagePath) })
+                            }
+                            val notesListAdapter = NotesListAdapter(list, requireContext(), itemOnClick)
+                            rvUserList.adapter = notesListAdapter
                         }
-                        val notesListAdapter = NotesListAdapter(list, requireContext(), itemOnClick)
-                        rvUserList.adapter = notesListAdapter
                     }
                     else -> Log.i("Home", "No action needed")
                 }
