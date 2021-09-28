@@ -55,7 +55,7 @@ class FirebaseStorageManager
             .addOnSuccessListener { snapShot->
                 result.value = DBReadResult.Success(snapShot.getValue() as Map<String, Notes>)
             }
-            .addOnSuccessListener {
+            .addOnFailureListener {
                 result.value = DBReadResult.Fail
             }
 
