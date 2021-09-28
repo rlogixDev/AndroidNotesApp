@@ -1,5 +1,6 @@
 package com.noteapp
 import android.os.Bundle
+import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -42,6 +43,9 @@ class SignInFragment : Fragment() {
         val email_mobile = view.findViewById<EditText>(R.id.email_mobile)
         val sign_in_password = view.findViewById<EditText>(R.id.sign_in_password)
 
+        fun CharSequence.isValidEmail() = isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(this,).matches()
+        fun CharSequence.isValidMobile() = isNotEmpty() && Patterns.PHONE.matcher(this,).matches()
+
 
         //Sign Up Page
         val createNewAcc = view.findViewById<TextView>(R.id.createNewAcc)
@@ -77,6 +81,12 @@ class SignInFragment : Fragment() {
                 }
             }
 
+            if (!(email_mobile.text.isValidEmail() || email_mobile.text.isValidMobile()))
+                sign_in_password.error = "Invalid input!"
+            else if (sign_in_password.text.isNullOrEmpty())
+                sign_in_password.error = "Incorrect password!"
+            else
+                view.findNavController().navigate(SignInFragmentDirections.signInToHome())
         }
 
         //Forgot Password Page
