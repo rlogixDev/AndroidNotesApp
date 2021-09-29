@@ -29,7 +29,7 @@ public class NotesListViewModel
 
     fun readNotesList():ArrayList<Notes> {
         val list: ArrayList<Notes> = ArrayList()
-        list.add(
+        /*list.add(
             Notes("Today",
                 "A Dummy Note",
                 "The official Android IDE. Android Studio will help you develop your app in a " +
@@ -70,7 +70,7 @@ public class NotesListViewModel
                 "The official Android IDE. Android Studio will help you develop your app in a " +
                         "more productive way at scale. Android Studio provides the fastest tools for building apps on every Android device."
             )
-        )
+        )*/
         val sortedList = ArrayList(list.sortedBy { it.details }.sortedBy { it.title })
         notesListFlow.value = list
         return list
