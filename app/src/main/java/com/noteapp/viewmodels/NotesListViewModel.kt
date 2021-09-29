@@ -71,12 +71,11 @@ public class NotesListViewModel
                         "more productive way at scale. Android Studio provides the fastest tools for building apps on every Android device."
             )
         )
-
-
-
+        val sortedList = ArrayList(list.sortedBy { it.details }.sortedBy { it.title })
         notesListFlow.value = list
         return list
     }
+
 }
 
   /*  init {
