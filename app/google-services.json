@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "612693668312",
+    "firebase_url": "https://rlogixnoteapp-default-rtdb.firebaseio.com",
     "project_id": "rlogixnoteapp",
     "storage_bucket": "rlogixnoteapp.appspot.com"
   },

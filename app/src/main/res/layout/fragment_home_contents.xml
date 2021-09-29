@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="20dp">
 
+
     <ImageView
         android:id="@+id/ivImage"
         android:layout_width="wrap_content"
@@ -17,10 +18,24 @@
         android:paddingStart="10dp"
         android:paddingEnd="10dp" />
 
+
+    <TextView
+        android:id="@+id/tvDay"
+        android:layout_width="69dp"
+        android:layout_height="21dp"
+        android:layout_marginLeft="3dp"
+        android:text="Day"
+        android:textColor="@color/purple_700"
+        app:layout_constraintLeft_toRightOf="@id/ivImage"
+        app:layout_constraintTop_toTopOf="@id/ivImage">
+
+    </TextView>
+
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:text="Title"
         android:textColor="@color/purple_700"
         app:layout_constraintLeft_toRightOf="@id/ivImage"
@@ -38,10 +53,13 @@
         android:id="@+id/tvDetails"
         android:layout_width="250dp"
         android:layout_height="40dp"
+        android:layout_marginTop="10dp"
         android:text="Details"
         android:textColor="@color/purple_200"
+        app:layout_constraintBottom_toBottomOf="@id/ivImage"
+        app:layout_constraintBottom_toTopOf="@+id/tvTitle"
         app:layout_constraintLeft_toRightOf="@id/ivImage"
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
-        app:layout_constraintBottom_toBottomOf="@id/ivImage"/>
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
