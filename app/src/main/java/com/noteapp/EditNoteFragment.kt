@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.Toast
 import androidx.navigation.findNavController
 import com.noteapp.R
@@ -31,9 +32,17 @@ class EditNoteFragment : Fragment() {
 
         //Note Details Page
         val btnEditNote = view.findViewById<Button>(R.id.btnEditNote)
+        //val edit_note_image = view.findViewById<Button>(R.id.edit_note_image)
+        val edit_note_details = view.findViewById<EditText>(R.id.edit_note_details)
         btnEditNote.setOnClickListener {
+
 //            Toast.makeText(context, "Account successfully created", Toast.LENGTH_LONG).show()
-            view.findNavController().navigate(EditNoteFragmentDirections.editNoteToNoteDetails())
+            if (edit_note_details.text.isNullOrEmpty())
+                edit_note_details.error = "Please enter text"
+            else {
+                view.findNavController()
+                    .navigate(EditNoteFragmentDirections.editNoteToNoteDetails())
+            }
         }
     }
 }

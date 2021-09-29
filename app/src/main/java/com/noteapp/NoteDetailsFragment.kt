@@ -17,6 +17,7 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.noteapp.viewmodels.NoteDetailViewModel
+import com.test.notes.AlertDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.IOException
@@ -48,16 +49,31 @@ class NoteDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //Edit Note Page
-        val btnNoteDetails = view.findViewById<Button>(R.id.btnNoteDetails)
+        val btnNoteDetailsDelete = view.findViewById<Button>(R.id.btnNoteDetailsDelete)
+        val btnNoteDetailsEdit = view.findViewById<Button>(R.id.btnNoteDetailsEdit)
         note_details_image = view.findViewById<ImageView>(R.id.note_details_image)
 
         note_details_image.setOnClickListener {
             startCamera()
         }
+        val firstButtonClick: () -> Unit = { ->
+            Toast.makeText(context, "Cancel", Toast.LENGTH_SHORT).show()
+        }
 
-        btnNoteDetails.setOnClickListener {
-//            Toast.makeText(context, "Account successfully created", Toast.LENGTH_LONG).show()
+        val secondButtonClick: () -> Unit = { ->
+            Toast.makeText(context, "Delete", Toast.LENGTH_SHORT).show()
+        }
+        btnNoteDetailsEdit.setOnClickListener {
             view.findNavController().navigate(NoteDetailsFragmentDirections.noteDetailsToEditNote())
+        }
+
+        btnNoteDetailsDelete.setOnClickListener {
+//            Toast.makeText(context, "Account successfully created", Toast.LENGTH_LONG).show()
+           // view.findNavController().navigate(NoteDetailsFragmentDirections.noteDetailsToEditNote())
+            AlertDialogFragment(
+                "Alert!", "Are you sure to delete this note? This won't be recovered once deleted", "Cancel",
+                "Delete", firstButtonClick, secondButtonClick
+            ).show(requireActivity().supportFragmentManager, "AlertDialogFragment")
         }
         //Home Page
         val logoNoteDetails = view.findViewById<ImageView>(R.id.logoNoteDetails)
@@ -111,6 +127,7 @@ class NoteDetailsFragment : Fragment() {
         if (requestCode == CAPTURE_IMAGE_REQUEST && resultCode == Activity.RESULT_OK) {
             val myBitmap = BitmapFactory.decodeFile(photoFile!!.absolutePath)
             note_details_image.setImageBitmap(myBitmap)
+
         } else {
             // displayMessage(baseContext, "Request cancelled or something went wrong.")
         }
