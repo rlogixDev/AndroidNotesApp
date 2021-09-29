@@ -31,7 +31,7 @@
 
     <fragment
         android:id="@+id/noteDetails"
-        android:name="com.noteapp.NoteDetailsFragment"
+        android:name="com.noteapp.NotesDetailsFragment"
         tools:layout="@layout/fragment_note_details">
         <action
             android:id="@+id/note_details_to_home"

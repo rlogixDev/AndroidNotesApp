@@ -5,9 +5,9 @@ import android.content.ContentResolver
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
-import com.noteapp.User
 import com.noteapp.database.NoteDBRepository
 import com.noteapp.database.di.NoteDBScope
+import com.noteapp.dataclass.User
 import javax.inject.Inject
 
 
@@ -25,11 +25,8 @@ class UserManager
 {
 
     override fun addUser(employee: User) {
-        val values = ContentValues().apply {
-            put(NoteDBRepository.UserEntry.COLUMN_USERNAME, employee.userName)
+        /*val values = ContentValues().apply {
             put(NoteDBRepository.UserEntry.COLUMN_BIRTHDATE, employee.birthDate)
-            put(NoteDBRepository.UserEntry.COLUMN_USERID, employee.userid)
-            put(NoteDBRepository.UserEntry.COLUMN_PASSWORD, employee.password)
             put(NoteDBRepository.UserEntry.COLUMN_FIRSTNAME, employee.firstName)
             put(NoteDBRepository.UserEntry.COLUMN_MOBILENUMBER, employee.mobileNumber)
             put(NoteDBRepository.UserEntry.COLUMN_GENDER, employee.gender)
@@ -37,10 +34,9 @@ class UserManager
             put(NoteDBRepository.UserEntry.COLUMN_COUNTRY, employee.country)
             put(NoteDBRepository.UserEntry.COLUMN_ZIPCODE, employee.zipcode)
             put(NoteDBRepository.UserEntry.COLUMN_STATE, employee.state)
-            put(NoteDBRepository.UserEntry.COLUMN_CITY, employee.city)
-            put(NoteDBRepository.UserEntry.COLUMN_GOOGLEID, employee.googleID)
+            put(NoteDBRepository.UserEntry.COLUMN_CITY, employee.city))
         }
-        db.insert(NoteDBRepository.UserEntry.TABLE_NAME, null, values)
+        db.insert(NoteDBRepository.UserEntry.TABLE_NAME, null, values)*/
     }
 
     @SuppressLint("Range")
@@ -76,15 +72,12 @@ class UserManager
             orderBY               // The sort order
         )
 
-        cursor?.let { cursor ->
+        /*cursor?.let { cursor ->
 
             while (cursor.moveToNext()) {
                 val user =
                     User(
-                        cursor?.getInt(cursor.getColumnIndex(BaseColumns._ID)),
-                        cursor?.getString(cursor?.getColumnIndex(NoteDBRepository.UserEntry.COLUMN_USERNAME)),
                         cursor?.getString(cursor?.getColumnIndex(NoteDBRepository.UserEntry.COLUMN_BIRTHDATE)),
-                        cursor?.getString(cursor?.getColumnIndex(NoteDBRepository.UserEntry.COLUMN_USERID)),
                         cursor?.getString(cursor?.getColumnIndex(NoteDBRepository.UserEntry.COLUMN_PASSWORD)),
                         cursor?.getString(cursor?.getColumnIndex(NoteDBRepository.UserEntry.COLUMN_FIRSTNAME)),
                         cursor?.getString(cursor?.getColumnIndex(NoteDBRepository.UserEntry.COLUMN_MOBILENUMBER)),
@@ -93,12 +86,11 @@ class UserManager
                         cursor?.getString(cursor?.getColumnIndex(NoteDBRepository.UserEntry.COLUMN_COUNTRY)),
                         cursor?.getString(cursor?.getColumnIndex(NoteDBRepository.UserEntry.COLUMN_ZIPCODE)),
                         cursor?.getString(cursor?.getColumnIndex(NoteDBRepository.UserEntry.COLUMN_STATE)),
-                        cursor?.getString(cursor?.getColumnIndex(NoteDBRepository.UserEntry.COLUMN_CITY)),
-                        cursor?.getString(cursor?.getColumnIndex(NoteDBRepository.UserEntry.COLUMN_GOOGLEID)))
+                        cursor?.getString(cursor?.getColumnIndex(NoteDBRepository.UserEntry.COLUMN_CITY)))
 
                 list.add(user)
             }
-        }
+        }*/
 
         return list
     }

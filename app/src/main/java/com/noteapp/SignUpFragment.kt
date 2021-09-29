@@ -17,6 +17,8 @@ import androidx.navigation.findNavController
 import com.noteapp.authentication.FirebaseAuthenticationManager
 import com.noteapp.authentication.IFirebaseAuthenticationManager
 import com.noteapp.authentication.Result
+import com.noteapp.dataclass.User
+import com.noteapp.storage.IFirebaseStorageManager
 import com.test.notes.AlertDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -27,6 +29,8 @@ import java.util.*
 class SignUpFragment : Fragment() {
     @Inject
     lateinit var firebaseAuthenticationManager: IFirebaseAuthenticationManager
+    @Inject
+    lateinit var firebaseStorageManager: IFirebaseStorageManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,12 +92,19 @@ class SignUpFragment : Fragment() {
                 ).collect { result ->
                     when (result) {
                         Result.SUCCESS -> {
-                            Toast.makeText(
-                                context,
-                                "Account created successfully",
-                                Toast.LENGTH_LONG
-                            ).show()
-                            view.findNavController().popBackStack()
+                            firebaseStorageManager.writeNewUser(
+                                User("20th Mar, 1988",
+                                "Awaneesh Singh",
+                                "1234567890",
+                                "Male",
+                                "test@gmail.com",
+                                "India",
+                                "201301",
+                                "Uttar Pradesh",
+                                "Noida")
+                            ).collect { dbResult->
+                                view.findNavController().popBackStack()
+                            }
                         }
                         Result.FAIL -> {
                             AlertDialogFragment(

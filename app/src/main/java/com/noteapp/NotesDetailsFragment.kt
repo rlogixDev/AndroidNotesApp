@@ -16,12 +16,16 @@ import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import com.noteapp.dataclass.Notes
+import com.noteapp.storage.FirebaseStorageManager
+import com.noteapp.storage.IFirebaseStorageManager
 import com.noteapp.viewmodels.NoteDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class NotesDetailsFragment : Fragment() {
