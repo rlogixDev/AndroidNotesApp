@@ -15,8 +15,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ForgotPasswordFragment : Fragment() {
-    @Inject
-    lateinit var firebaseAuthenticationManager : IFirebaseAuthenticationManager
+//    @Inject
+//    lateinit var firebaseAuthenticationManager : IFirebaseAuthenticationManager
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
