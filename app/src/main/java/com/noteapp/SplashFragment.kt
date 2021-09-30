@@ -17,6 +17,7 @@ class SplashFragment: Fragment(R.layout.activity_splash) {
             delay(3000)
             findNavController().navigate(SplashFragmentDirections.splashToSignIn())
 
+
         }
     }
 }
