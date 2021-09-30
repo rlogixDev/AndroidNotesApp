@@ -15,6 +15,9 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ForgotPasswordFragment : Fragment() {
+    @Inject
+    lateinit var firebaseAuthenticationManager : IFirebaseAuthenticationManager
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +40,15 @@ class ForgotPasswordFragment : Fragment() {
         fun CharSequence.isValidEmail() = isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(this,).matches()
 
         if (etForgotPassword.text.isValidEmail()) {
+
+//            val emailAddress = "user@example.com"
+
+//            Firebase.auth.sendPasswordResetEmail(emailAddress)
+//                .addOnCompleteListener { task ->
+//                    if (task.isSuccessful) {
+//                        Log.d(TAG, "Email sent.")
+//                    }
+//                }
 
             //Sign In Page
             btnSendEmail.setOnClickListener {
