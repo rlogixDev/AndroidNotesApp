@@ -17,6 +17,7 @@ import androidx.navigation.findNavController
 import com.noteapp.authentication.FirebaseAuthenticationManager
 import com.noteapp.authentication.IFirebaseAuthenticationManager
 import com.noteapp.authentication.Result
+import com.noteapp.databinding.FragmentSignUpBinding
 import com.noteapp.dataclass.User
 import com.noteapp.storage.IFirebaseStorageManager
 import com.test.notes.AlertDialogFragment
@@ -32,6 +33,9 @@ class SignUpFragment : Fragment() {
     @Inject
     lateinit var firebaseStorageManager: IFirebaseStorageManager
 
+    private var _binding: FragmentSignUpBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -46,6 +50,8 @@ class SignUpFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentSignUpBinding.bind(view)
+
         val emailId = view.findViewById<EditText>(R.id.emailId)
         val password = view.findViewById<EditText>(R.id.password)
 
@@ -56,21 +62,25 @@ class SignUpFragment : Fragment() {
 
         //Birth Date Input
         val birthDate = view.findViewById<EditText>(R.id.birthDate)
-        val calendar = Calendar.getInstance()
 
-        birthDate.setOnClickListener {
-            context?.let { it1 ->
-                DatePickerDialog(
-                    it1,
-                    DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-                        val month_add = month + 1
-                        birthDate.text = ("$year/$month_add/$dayOfMonth") as Editable
-                    },
-                    calendar.get(Calendar.YEAR),
-                    calendar.get(Calendar.MONTH),
-                    calendar.get(Calendar.DAY_OF_MONTH),
-                ).show()
+        binding.apply {
 
+            birthDate.setOnClickListener {
+
+                val datePickerFragment = DatePickerFragment()
+                val supportFragmentManager = requireActivity().supportFragmentManager
+
+                supportFragmentManager.setFragmentResultListener(
+                    "REQUEST_KEY",
+                    viewLifecycleOwner) {
+                        resultKey, bundle ->
+                    if (resultKey == "REQUEST_KEY") {
+                        val date = bundle.getString("SELECTED_DATE")
+//                        birthDate.setText(date)
+                        birthDate.text = date as Editable
+                    }
+                    datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
+                }
             }
         }
 
@@ -167,4 +177,8 @@ class SignUpFragment : Fragment() {
             }
         }
     }
+        override fun onDestroyView() {
+            super.onDestroyView()
+            _binding = null
+        }
 }
