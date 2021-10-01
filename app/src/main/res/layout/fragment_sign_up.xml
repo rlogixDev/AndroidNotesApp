@@ -104,6 +104,7 @@
             android:layout_width="330dp"
             android:layout_height="wrap_content"
             android:hint="Birth Date"
+            tools:text="20/12/2021"
             android:inputType="date"
             android:layout_marginStart="10dp"
             android:textColor="@color/purple_700"
