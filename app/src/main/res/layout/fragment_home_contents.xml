@@ -1,66 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="380dp"
-    android:layout_height="300dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="20dp">
-
-
-    <ImageView
-        android:id="@+id/ivImage"
-        android:layout_width="55dp"
-        android:layout_height="67dp"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:src="@drawable/ic_baseline_image_60_purple"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/tvTitle"
-        app:layout_constraintTop_toTopOf="parent" />
-
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/tvDay"
-        android:layout_width="248dp"
-        android:layout_height="26dp"
-        android:layout_marginLeft="3dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
         android:text="Day"
-        android:textColor="@color/purple_700"
+        android:textColor="@color/black"
         app:layout_constraintLeft_toRightOf="@id/ivImage"
         app:layout_constraintTop_toTopOf="@id/ivImage">
-
     </TextView>
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="251dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="28dp"
-        android:text="Title"
-        android:textColor="@color/purple_700"
-        app:layout_constraintLeft_toRightOf="@id/ivImage"
-        app:layout_constraintTop_toTopOf="@id/ivImage" />
 
-    <CheckBox
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:textColor="@color/purple_700"
-        app:layout_constraintBottom_toBottomOf="@id/ivImage"
-        app:layout_constraintLeft_toRightOf="@id/tvTitle"
-        app:layout_constraintTop_toTopOf="@id/ivImage"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <TextView
-        android:id="@+id/tvDetails"
-        android:layout_width="270dp"
-        android:layout_height="120dp"
-        android:text="Details"
-        android:textColor="@color/purple_700"
-        app:layout_constraintLeft_toRightOf="@id/ivImage"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle">
-
-    </TextView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        >
+        <ImageView
+            android:id="@+id/ivImage"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/tvTitle"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginRight="10dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Title"
+                android:textColor="@color/black"
+                app:layout_constraintLeft_toRightOf="@id/ivImage"
+                app:layout_constraintTop_toTopOf="@id/ivImage"/>
+            <TextView
+                android:id="@+id/tvDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Details"
+                android:textColor="@color/grey"
+                app:layout_constraintLeft_toRightOf="@id/ivImage"
+                app:layout_constraintTop_toBottomOf="@id/tvTitle">
+            </TextView>
+        </LinearLayout>
+        <CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:textColor="@color/purple_700"
+            app:layout_constraintBottom_toBottomOf="@id/ivImage"
+            app:layout_constraintLeft_toRightOf="@id/tvTitle"
+            app:layout_constraintTop_toTopOf="@id/ivImage"
+            app:layout_constraintVertical_bias="1.0" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey"></View>
+</LinearLayout>

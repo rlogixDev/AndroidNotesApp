@@ -1,14 +1,13 @@
 package com.noteapp
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -27,6 +26,16 @@ class   HomeFragment : Fragment(R.layout.fragment_home), AdapterView.OnItemSelec
     @Inject
     lateinit var firebaseStorageManager: IFirebaseStorageManager
 
+    lateinit var notesListAdapter: NotesListAdapter
+
+    lateinit var btnDelete: Button
+    lateinit var btnEdit: Button
+    lateinit var checkboxSelectAll: CheckBox
+    lateinit var tvTitle: TextView
+    lateinit var etSearch: EditText
+    lateinit var _list: ArrayList<Notes>
+    lateinit var ivDelete: ImageView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,40 +44,126 @@ class   HomeFragment : Fragment(R.layout.fragment_home), AdapterView.OnItemSelec
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
+    private fun performCheckBoxChangeAction(listData: List<Notes>) {
+        val listFilter = listData.filter { it.isSelected }
+        when (listFilter.size) {
+            1 -> {
+                btnDelete.visibility = View.VISIBLE
+                btnEdit.visibility = View.VISIBLE
+            }
+            0 -> {
+                btnDelete.visibility = View.GONE
+                btnEdit.visibility = View.GONE
+            }
+            else -> {
+                btnDelete.visibility = View.VISIBLE
+                btnEdit.visibility = View.GONE
+            }
+        }
+        checkboxSelectAll.isChecked = listFilter.size == listData.size
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val itemOnClick: (View, Int) -> Unit = { view, position ->
             Toast.makeText(context, "Item: $position", Toast.LENGTH_SHORT).show()
         }
 
+        btnDelete = view.findViewById(R.id.btnDelete)
+        btnEdit   = view.findViewById(R.id.btnEdit)
+        checkboxSelectAll = view.findViewById(R.id.checkboxSelectAll)
+        tvTitle = view.findViewById(R.id.tvTitle)
+        etSearch = view.findViewById(R.id.etSearch)
+        ivDelete = view.findViewById(R.id.ivDelete)
+
+        btnDelete.setOnClickListener {
+            notesListAdapter.getList().filter {
+                it.isSelected
+            }.forEach { note ->
+                lifecycleScope.launchWhenStarted {
+                    firebaseStorageManager.deleteNote(note).collect {
+                        loadData()
+                    }
+                }
+            }
+            loadData()
+        }
+
+        tvTitle.setOnClickListener {
+            if(_list.size > 0) {
+                etSearch.visibility = View.VISIBLE
+                ivDelete.visibility  = View.VISIBLE
+                tvTitle.visibility  = View.GONE
+            }
+        }
+
+        ivDelete.setOnClickListener {
+            etSearch.visibility = View.GONE
+            ivDelete.visibility  = View.GONE
+            tvTitle.visibility  = View.VISIBLE
+        }
+
+
+        val textWatcher = object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if(::_list.isInitialized) {
+                    val list = _list.filter {
+                        it.title.contains(p0.toString())
+                    }
+                    notesListAdapter.refreshData(list)
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+        }
+
+        etSearch.addTextChangedListener(textWatcher)
+
+        checkboxSelectAll.setOnClickListener {
+            val listData = notesListAdapter.getList()
+            listData.forEach {
+                it.isSelected = checkboxSelectAll.isChecked
+            }
+            notesListAdapter.notifyDataSetChanged()
+            performCheckBoxChangeAction(listData)
+        }
+
+        val checkBoxChangeListner: (View, Int) -> Unit = { view, position ->
+            val listData = notesListAdapter.getList()
+            listData[position].isSelected = !listData[position].isSelected
+            notesListAdapter.refreshData(listData)
+            performCheckBoxChangeAction(listData)
+        }
+
         val rvUserList = view.findViewById<RecyclerView>(R.id.rvUserList)
+        notesListAdapter =
+            NotesListAdapter(arrayListOf(), requireContext(), itemOnClick, checkBoxChangeListner)
+        rvUserList.adapter = notesListAdapter
+
         //Edit Note
         val createNewNote = view.findViewById<FloatingActionButton>(R.id.createNewNote)
         createNewNote.setOnClickListener {
-//            Toast.makeText(context, "Account successfully created", Toast.LENGTH_LONG).show()
             view.findNavController().navigate(HomeFragmentDirections.homeToEditNote())
         }
-        //Note Details
-//        val btnSignUp = view.findViewById<Button>(R.id.btnSignUp)
-//        btnSignUp.setOnClickListener {
-////            Toast.makeText(context, "Account successfully created", Toast.LENGTH_LONG).show()
-//            view.findNavController().navigate(HomeFragmentDirections.homeToNoteDetails())
-//        }
-        val spinner: Spinner = view.findViewById(R.id.spinner)
 
+        val spinner: Spinner = view.findViewById(R.id.spinner)
         spinner.onItemSelectedListener = this
-// Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter.createFromResource(
             requireContext(),
             R.array.Sorting_Array,
             android.R.layout.simple_spinner_item
         ).also { adapter ->
-            // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            // Apply the adapter to the spinner
             spinner.adapter = adapter
         }
 
+        loadData()
+    }
+
+    private fun loadData() {
         lifecycleScope.launchWhenStarted {
             firebaseStorageManager.getUserNotes().collect { result ->
                 when (result) {
@@ -82,11 +177,10 @@ class   HomeFragment : Fragment(R.layout.fragment_home), AdapterView.OnItemSelec
                                 val date = map["date"] ?: ""
                                 val imagePath = map["imagePath"] ?: ""
 
-                                list.add(let { Notes(key, title, details, date, imagePath) })
+                                list.add(let { Notes(key, "", title, details, date, imagePath) })
                             }
-                            val notesListAdapter =
-                                NotesListAdapter(list, requireContext(), itemOnClick)
-                            rvUserList.adapter = notesListAdapter
+                            _list = list
+                            notesListAdapter?.refreshData(list)
                         }
                     }
                     else -> Log.i("Home", "No action needed")
@@ -96,6 +190,20 @@ class   HomeFragment : Fragment(R.layout.fragment_home), AdapterView.OnItemSelec
     }
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+        when(p2) {
+            0-> {
+                val list = notesListAdapter.getList().sortedBy {
+                    it.title
+                }
+                notesListAdapter.refreshData(list)
+            }
+            1-> {
+                val list = notesListAdapter.getList().sortedByDescending {
+                    it.title
+                }
+                notesListAdapter.refreshData(list)
+            }
+        }
 
     }
 

@@ -133,12 +133,6 @@ class SignInFragment : Fragment() {
             view.findNavController().navigate(SignInFragmentDirections.signInToForgotPassword())
         }
 
-        //OTP Sign In Page
-        val sign_in_otp = view.findViewById<TextView>(R.id.sign_in_otp)
-        sign_in_otp.setOnClickListener {
-            view.findNavController().navigate(SignInFragmentDirections.signInToOtpSignIn())
-        }
-
         // Configure Google Sign In
         val sign_in_google = view.findViewById<SignInButton>(R.id.sign_in_google)
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
