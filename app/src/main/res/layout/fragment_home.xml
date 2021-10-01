@@ -10,42 +10,94 @@
         android:id="@+id/TitleBar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/grey"
+        android:background="@color/purple_200"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent">
-
+        <EditText
+            android:id="@+id/etSearch"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:imeOptions="actionDone"
+            android:layout_weight="1">
+        </EditText>
+        <ImageView
+            android:id="@+id/ivDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_baseline_delete_forever_24"
+            android:visibility="gone"
+            ></ImageView>
         <TextView
+            android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Notes"
             android:drawableRight="@drawable/ic_search"
             android:layout_weight="1"
-            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:textColor="@color/white"
             android:gravity="center">
-
         </TextView>
     </LinearLayout>
 
     <Spinner
         android:id="@+id/spinner"
-        android:layout_width="96dp"
-        android:layout_height="62dp"
-        android:layout_marginLeft="300dp"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/ic_sort"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TitleBar"
+        android:layout_marginRight="50dp"
         >
-
     </Spinner>
+
+    <CheckBox
+        android:id="@+id/checkboxSelectAll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:textColor="@color/purple_700"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TitleBar"
+        android:layout_marginTop="10dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvUserList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="100dp"
+        android:layout_height="0dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@+id/spinner"/>
+        app:layout_constraintTop_toBottomOf="@+id/spinner"
+        app:layout_constraintHeight_percent=".70"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/rvUserList"
+        app:layout_constraintLeft_toLeftOf="parent">
+        <Button
+            android:id="@+id/btnEdit"
+            android:layout_width="100dp"
+            android:layout_height="48dp"
+            android:text="Edit"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="50dp"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/btnDelete"
+            android:layout_width="100dp"
+            android:layout_height="48dp"
+            android:text="Delete"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:visibility="gone"/>
+    </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/createNewNote"

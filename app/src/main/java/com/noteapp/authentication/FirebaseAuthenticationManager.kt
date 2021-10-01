@@ -35,6 +35,17 @@ class FirebaseAuthenticationManager
         return resultFlow
     }
 
+    override suspend fun forgotPassword(emailId: String): Flow<Result> {
+        val resultFlow: MutableStateFlow<Result> = MutableStateFlow(Result.IN_PROGRSS)
+        auth.sendPasswordResetEmail(emailId).addOnCompleteListener { authresult->
+            when{
+                authresult.isSuccessful->resultFlow.value = Result.SUCCESS
+                else->resultFlow.value = Result.FAIL
+            }
+        }
+        return resultFlow
+    }
+
     override fun getUserId(): String {
         return auth.currentUser?.uid?:""
     }
