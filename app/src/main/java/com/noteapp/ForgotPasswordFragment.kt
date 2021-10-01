@@ -10,11 +10,18 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import com.noteapp.authentication.IFirebaseAuthenticationManager
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ForgotPasswordFragment : Fragment() {
+
+    @Inject
+    lateinit var firebaseAuthenticationManager : IFirebaseAuthenticationManager
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,16 +43,17 @@ class ForgotPasswordFragment : Fragment() {
 
         fun CharSequence.isValidEmail() = isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(this,).matches()
 
-        if (etForgotPassword.text.isValidEmail()) {
-
-            //Sign In Page
-            btnSendEmail.setOnClickListener {
-                Toast.makeText(context, "Password Sent!", Toast.LENGTH_LONG).show()
-                view.findNavController().navigate(ForgotPasswordFragmentDirections.forgotPasswordToSignIn())
+        btnSendEmail.setOnClickListener {
+            if (etForgotPassword.text.isValidEmail()) {
+                //Sign In Page
+                lifecycleScope.launchWhenStarted {
+                    firebaseAuthenticationManager.forgotPassword(etForgotPassword.text.toString())
+                }
+            } else {
+                etForgotPassword.error = "Invalid email!"
             }
-        } else {
-            etForgotPassword.error = "Invalid email!"
+            Toast.makeText(context, "Password Sent!", Toast.LENGTH_LONG).show()
+            view.findNavController().navigate(ForgotPasswordFragmentDirections.forgotPasswordToSignIn())
         }
-
     }
 }
