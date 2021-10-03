@@ -93,13 +93,13 @@ class FirebaseStorageManager
         return result
     }
 
-    override suspend fun updateNote(note: Notes): Flow<DBResult> {
+    override suspend fun updateNote(note: Map<String, String>, id: String): Flow<DBResult> {
         val result: MutableStateFlow<DBResult> = MutableStateFlow(DBResult.IN_PROGRESS)
         database
             .child(DB_NOTES)
             .child(firebaseAuthenticationManager.getUserId())
-            .child(note.id)
-            .setValue(note)
+            .child(id)
+            .updateChildren(note)
             .addOnSuccessListener {
                 result.value = DBResult.SUCCESS
             }.addOnFailureListener {

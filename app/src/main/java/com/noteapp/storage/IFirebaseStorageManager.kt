@@ -11,7 +11,7 @@ interface IFirebaseStorageManager {
     public suspend fun createNote(note: Notes): Flow<DBResult>
     public suspend fun getUserNotes(): Flow<DBReadResult>
     public suspend fun deleteNote(note: Notes): Flow<DBResult>
-    public suspend fun updateNote(note: Notes): Flow<DBResult>
+    public suspend fun updateNote(note: Map<String, String>, id: String): Flow<DBResult>
     public suspend fun uploadImage(file: File, filenName: String): Flow<UpladImageResult>
     public suspend fun getImagePath(filenName: String): String
 }

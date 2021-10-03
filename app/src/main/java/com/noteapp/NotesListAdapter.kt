@@ -12,6 +12,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.noteapp.dataclass.Notes
 import com.squareup.picasso.Picasso
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class NotesListAdapter(private var dataSet: List<Notes>,
@@ -39,6 +42,7 @@ class NotesListAdapter(private var dataSet: List<Notes>,
 
     public fun refreshData(_dataSet: List<Notes>) {
         dataSet = _dataSet
+        dateValue = ""
         notifyDataSetChanged()
     }
 
@@ -58,18 +62,50 @@ class NotesListAdapter(private var dataSet: List<Notes>,
         return holder
     }
 
+    var dateValue = "";
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val note = dataSet.get(position)
-        holder.tvDay?.text = note.day
         holder.tvDetails?.text = note.details
         holder.tvTitle?.text = note.title
         Picasso.get()
             .load(note.imagePath)
             .into(holder.ivImage);
 
+        val mDateValue = getFormattedDate(note.date)
+        when(mDateValue) {
+            dateValue -> holder.tvDay?.visibility = View.GONE
+            else      -> {
+                holder.tvDay?.visibility = View.VISIBLE
+                holder.tvDay?.text = mDateValue
+                dateValue = mDateValue
+            }
+        }
+
         holder.checkbox?.isChecked = note.isSelected
         holder.checkbox?.setOnClickListener {
             checkBoxChangeListner(it, position)
+        }
+    }
+
+    private fun getFormattedDate(mDate: String): String {
+        try {
+            val currentTime = Calendar.getInstance().time
+            val dateFormatter = SimpleDateFormat("yyyy-mm-dd'T'hh:mm:ss")
+            val date1: Date = dateFormatter.parse(dateFormatter.format(currentTime))
+            val date2: Date = dateFormatter.parse(mDate)
+            val different: Long = date1.getTime() - date2.getTime()
+            val daysInMilli = 1000 * 60 * 60 * 24
+            val _dateFormatter = SimpleDateFormat("DD MMM, YYYY")
+            val day: Long = different/daysInMilli
+            return when (day) {
+                0L    -> "Today"
+                -1L   -> "Yesterday"
+                else -> _dateFormatter.format(date2)
+            }
+        } catch (e: ParseException) {
+            e.printStackTrace()
+            return ""
         }
     }
 
