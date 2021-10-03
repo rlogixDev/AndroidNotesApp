@@ -11,8 +11,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.addCallback
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
@@ -28,6 +32,7 @@ import com.noteapp.authentication.Result
 import com.test.notes.AlertDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import java.util.concurrent.Executor
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -35,35 +40,37 @@ class SignInFragment : Fragment() {
     @Inject
     lateinit var firebaseAuthenticationManager : IFirebaseAuthenticationManager
 
+    private lateinit var executor: Executor
+    private lateinit var biometricPrompt: BiometricPrompt
+    private lateinit var promptInfo: BiometricPrompt.PromptInfo
+
     private companion object {
         private const val TAG = "SignInFragment"
         private const val RC_GOOGLE_SIGN_IN= 4926
     }
 
-    private lateinit var auth: FirebaseAuth
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        auth = Firebase.auth
     }
 
     override fun onStart() {
         super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = auth.currentUser
-        updateUI(currentUser)
     }
 
-    private fun updateUI(user: FirebaseUser?) {
-        if(user == null) {
+    private fun updateUI() {
+        if(firebaseAuthenticationManager.getUserId().isNullOrEmpty()) {
             Log.w(TAG, "User is null, not going to navigate")
             return
         }
         else {
-            //startActivity(Intent(requireContext(), HomeFragment::class.java))
-            view?.findNavController()?.navigate(SignInFragmentDirections.signInToHome())
+            promptInfo = BiometricPrompt.PromptInfo.Builder()
+                .setTitle("Biometric login for my app")
+                .setSubtitle("Log in using your biometric credential")
+                .setNegativeButtonText("Use account password")
+                .setConfirmationRequired(false)
+                .build()
+            biometricPrompt.authenticate(promptInfo)
         }
-
     }
 
     override fun onCreateView(
@@ -84,6 +91,33 @@ class SignInFragment : Fragment() {
         fun CharSequence.isValidEmail() = isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(this,).matches()
         fun CharSequence.isValidMobile() = isNotEmpty() && Patterns.PHONE.matcher(this,).matches()
 
+        executor = ContextCompat.getMainExecutor(requireContext())
+
+        biometricPrompt = BiometricPrompt(this, executor,
+            object : BiometricPrompt.AuthenticationCallback() {
+                override fun onAuthenticationError(errorCode: Int,
+                                                   errString: CharSequence) {
+                    super.onAuthenticationError(errorCode, errString)
+                    Toast.makeText(requireContext(),
+                        "Authentication error: $errString", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+                override fun onAuthenticationSucceeded(
+                    result: BiometricPrompt.AuthenticationResult) {
+                    super.onAuthenticationSucceeded(result)
+                    findNavController()?.navigate(SignInFragmentDirections.signInToHome())
+                }
+
+                override fun onAuthenticationFailed() {
+                    super.onAuthenticationFailed()
+                    Toast.makeText(requireContext(), "Authentication failed",
+                        Toast.LENGTH_SHORT)
+                        .show()
+                }
+            })
+
+        updateUI()
 
         //Sign Up Page
         val createNewAcc = view.findViewById<TextView>(R.id.createNewAcc)
@@ -93,13 +127,6 @@ class SignInFragment : Fragment() {
 
         //Home Page
         val btnSignIn = view.findViewById<Button>(R.id.btnSignIn)
-        val firstButtonClick: () -> Unit = { ->
-            Toast.makeText(context, "Invalid email or password", Toast.LENGTH_SHORT).show()
-        }
-
-        val secondButtonClick: () -> Unit = { ->
-            Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
-        }
         btnSignIn.setOnClickListener {
             lifecycleScope.launchWhenStarted {
                 firebaseAuthenticationManager.login(email_mobile.text.toString(), sign_in_password.text.toString()).collect {result->
@@ -144,6 +171,16 @@ class SignInFragment : Fragment() {
             val signInIntent = googleSignInClient.signInIntent
             startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN)
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            requireActivity().finish()
+        }
+    }
+
+    val firstButtonClick: () -> Unit = { ->
+    }
+
+    val secondButtonClick: () -> Unit = { ->
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -158,29 +195,23 @@ class SignInFragment : Fragment() {
                 val account = task.getResult(ApiException::class.java)!!
                 Log.w(TAG, "TRY 2")
                 Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
-                firebaseAuthWithGoogle(account.idToken!!)
+                lifecycleScope.launchWhenStarted {
+                    firebaseAuthenticationManager.firebaseAuthWithGoogle(account.idToken!!).collect {
+                        when(it) {
+                            Result.SUCCESS -> findNavController().navigate(SignInFragmentDirections.signInToHome())
+                            Result.FAIL-> {
+                                AlertDialogFragment(
+                                    "Alert!", "Unable to login, please try again", "OK",
+                                    "", firstButtonClick, secondButtonClick
+                                ).show(requireActivity().supportFragmentManager, "AlertDialogFragment")
+                            }
+                        }
+                    }
+                }
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e)
             }
         }
-    }
-
-    private fun firebaseAuthWithGoogle(idToken: String) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(requireActivity()) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithCredential:success")
-                    val user = auth.currentUser
-                    updateUI(user)
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Toast.makeText(requireContext(), "signInWithCredential:failure", Toast.LENGTH_LONG).show()
-                    Log.w(TAG, "signInWithCredential:failure", task.exception)
-                    updateUI(null)
-                }
-            }
     }
 }

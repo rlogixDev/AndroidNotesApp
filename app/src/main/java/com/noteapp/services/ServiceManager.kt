@@ -1,22 +1,27 @@
 package com.noteapp.services
 
+import com.google.gson.JsonObject
+import com.noteapp.dataclass.Address
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
-interface ILoginServiceManage {
-    public suspend fun login(number: String, password: String) : Flow<LoginResponse?>
+interface IAddressManager {
+    public suspend fun getAddress() : StateFlow<ArrayList<Map<String, AddressResponse>>?>
 }
 
 class ServiceManager
-@Inject constructor(): ILoginServiceManage {
-    val baseURL = "https://archaeogroup.com/allen/api/"
+@Inject constructor(): IAddressManager {
+    val baseURL = "https://rlogixx-33270-default-rtdb.firebaseio.com/"
     val serverError = "Unable to get response from server."
     // Interface to be used as Retrofit service.
     // We're using Dog.ceo public API.
@@ -26,19 +31,19 @@ class ServiceManager
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(APIClient::class.java)
-    override suspend fun login(number: String, password: String): Flow<LoginResponse?> {
-        val loginResponse: MutableStateFlow<LoginResponse?> = MutableStateFlow(null)
-        val response = apiClient.login(number, password)
-        val callBack = object : Callback<LoginResponse?> {
+    override suspend fun getAddress(): StateFlow<ArrayList<Map<String, AddressResponse>>?> {
+        val loginResponse: MutableStateFlow<ArrayList<Map<String, AddressResponse>>?> = MutableStateFlow(null)
+        val response = apiClient.getAddress()
+        val callBack = object : Callback<ArrayList<Map<String, AddressResponse>>?> {
             override fun onResponse(
-                call: Call<LoginResponse?>,
-                response: Response<LoginResponse?>
+                call: Call<ArrayList<Map<String, AddressResponse>>?>,
+                response: Response<ArrayList<Map<String, AddressResponse>>?>
             ) {
                 loginResponse.value = response.body()
             }
 
-            override fun onFailure(call: Call<LoginResponse?>, t: Throwable) {
-                val apiResponseLogin =  LoginResponse()
+            override fun onFailure(call: Call<ArrayList<Map<String, AddressResponse>>?>, t: Throwable) {
+                val apiResponseLogin =  null
                 loginResponse.value = apiResponseLogin
             }
         }

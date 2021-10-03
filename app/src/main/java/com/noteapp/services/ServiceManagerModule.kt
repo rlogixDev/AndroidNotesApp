@@ -9,5 +9,5 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 object ServiceManagerModule {
     @Provides
-    internal fun bind(impl: ServiceManager): ILoginServiceManage = impl
+    internal fun bind(impl: ServiceManager): IAddressManager = impl
 }

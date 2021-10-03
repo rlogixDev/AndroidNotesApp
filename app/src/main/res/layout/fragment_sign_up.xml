@@ -86,14 +86,15 @@
             app:layout_constraintLeft_toLeftOf="parent" />
 
         <!--    Birth Date-->
-        <EditText
+        <TextView
             android:id="@+id/birthDate"
             android:layout_width="330dp"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:hint="Birth Date"
             android:inputType="date"
             android:layout_marginStart="10dp"
             android:textColor="@color/purple_700"
+            android:gravity="center_vertical"
             app:layout_constraintTop_toBottomOf="@id/password"
             app:layout_constraintLeft_toRightOf="@id/ivBirthDate" />
         <ImageView
@@ -241,7 +242,7 @@
 
         <!--    Zip Code-->
 
-        <EditText
+        <AutoCompleteTextView
             android:id="@+id/zipCode"
             android:layout_width="330dp"
             android:layout_height="wrap_content"
