@@ -65,7 +65,6 @@ class NotesListAdapter(private var dataSet: List<Notes>,
         holder.tvTitle?.text = note.title
         Picasso.get()
             .load(note.imagePath)
-            .resize(300, 300)
             .into(holder.ivImage);
 
         holder.checkbox?.isChecked = note.isSelected

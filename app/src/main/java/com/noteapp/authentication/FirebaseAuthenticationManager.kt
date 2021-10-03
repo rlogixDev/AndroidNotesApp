@@ -49,4 +49,8 @@ class FirebaseAuthenticationManager
     override fun getUserId(): String {
         return auth.currentUser?.uid?:""
     }
+
+    override fun getUserToken(): String {
+        return auth.currentUser?.tenantId?:""
+    }
 }

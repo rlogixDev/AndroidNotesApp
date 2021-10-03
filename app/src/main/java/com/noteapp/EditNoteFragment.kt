@@ -25,6 +25,7 @@ import androidx.navigation.findNavController
 import com.noteapp.dataclass.Notes
 import com.noteapp.storage.DBResult
 import com.noteapp.storage.IFirebaseStorageManager
+import com.noteapp.storage.UpladImageResult
 import com.test.notes.AlertDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -50,7 +51,7 @@ class EditNoteFragment : Fragment() {
     private lateinit var photoFile: File
     val CAPTURE_IMAGE_REQUEST = 1
     private var mCurrentPhotoPath: String = ""
-    private var imagePath = "https://media.geeksforgeeks.org/wp-content/uploads/20210101144014/gfglogo.png"
+    private var imagePath = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,39 +74,8 @@ class EditNoteFragment : Fragment() {
         edit_note_image = view.findViewById<ImageView>(R.id.edit_note_image)
         btnEditNote = view.findViewById<Button>(R.id.btnEditNote)
 
-        val requestPermissionLauncher =
-            registerForActivityResult(
-                ActivityResultContracts.RequestPermission()
-            ) { isGranted: Boolean ->
-                if (isGranted) {
-                    startCamera()
-                } else {
-                    showErrorMessage("Camera permission is not allowed.")
-                }
-            }
-
         addImage.setOnClickListener {
-            when {
-                ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.CAMERA
-                ) == PackageManager.PERMISSION_GRANTED -> {
-                    startCamera()
-                }
-                /*shouldShowRequestPermissionRationale(...) -> {
-                // In an educational UI, explain to the user why your app requires this
-                // permission for a specific feature to behave as expected. In this UI,
-                // include a "cancel" or "no thanks" button that allows the user to
-                // continue using your app without granting the permission.
-                showInContextUI(...)
-            }*/
-                else -> {
-                    // You can directly ask for the permission.
-                    // The registered ActivityResultCallback gets the result of this request.
-                    requestPermissionLauncher.launch(
-                        Manifest.permission.ACCESS_FINE_LOCATION)
-                }
-            }
+            checkPermissions()
         }
         //Note Details Page
         btnEditNote.setOnClickListener { mView->
@@ -187,13 +157,50 @@ class EditNoteFragment : Fragment() {
                 val fileName = System.currentTimeMillis().toString()
                 firebaseStorageManager.uploadImage(photoFile!!, fileName).collect {
                     when(it) {
-                        DBResult.SUCCESS -> imagePath = ""//firebaseStorageManager.getImagePath(fileName)
-                        DBResult.FAIL -> showErrorMessage("Unable to upload image")
+                        is UpladImageResult.Success -> imagePath = it.path
+                        UpladImageResult.Fail -> showErrorMessage("Unable to upload image")
                     }
                 }
             }
         } else {
             // displayMessage(baseContext, "Request cancelled or something went wrong.")
+        }
+    }
+
+    val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                checkPermissions()
+            } else {
+                showErrorMessage("Camera permission is not allowed.")
+            }
+        }
+
+    private fun checkPermissions() {
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+                    &&
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+            -> {
+                startCamera()
+            }
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED -> requestPermissionLauncher.launch(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            else -> {
+                requestPermissionLauncher.launch(
+                    Manifest.permission.CAMERA)
+            }
         }
     }
 }
