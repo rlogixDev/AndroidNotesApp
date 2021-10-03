@@ -31,6 +31,16 @@ class SignUpFragment : Fragment() {
     lateinit var firebaseAuthenticationManager: IFirebaseAuthenticationManager
     @Inject
     lateinit var firebaseStorageManager: IFirebaseStorageManager
+    lateinit var btnSignUp: Button
+    lateinit var email_id: EditText
+    lateinit var password: EditText
+    lateinit var birthDate: EditText
+    lateinit var mobile: EditText
+    lateinit var firstName: EditText
+    lateinit var country: EditText
+    lateinit var state: EditText
+    lateinit var zipCode: EditText
+    lateinit var city:EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,8 +56,18 @@ class SignUpFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val emailId = view.findViewById<EditText>(R.id.emailId)
         val password = view.findViewById<EditText>(R.id.password)
+        val mobile = view.findViewById<EditText>(R.id.mobile)
+        val firstName = view.findViewById<EditText>(R.id.firstName)
+        val email_id = view.findViewById<EditText>(R.id.email_id)
+        val country = view.findViewById<EditText>(R.id.country)
+        val zipCode = view.findViewById<EditText>(R.id.zipCode)
+        val state = view.findViewById<EditText>(R.id.state)
+        val city = view.findViewById<EditText>(R.id.city)
+        val tvGender = view.findViewById<TextView>(R.id.tvGender)
+        val rbGenderFemale = view.findViewById<RadioButton>(R.id.rbGenderFemale)
+        val rbGenderMale = view.findViewById<RadioButton>(R.id.rbGenderMale)
+        val rbGenderOther = view.findViewById<RadioButton>(R.id.rbGenderOther)
 
         fun CharSequence.isValidEmail() =
             isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(this,).matches()
@@ -82,13 +102,40 @@ class SignUpFragment : Fragment() {
         val secondButtonClick: () -> Unit = { ->
             Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
         }
-        val btnCheck = view.findViewById<Button>(R.id.btnCheck)
+
+
         val btnSignUp = view.findViewById<Button>(R.id.btnSignUp)
-        btnCheck.setOnClickListener {
+        btnSignUp.setOnClickListener {
+            if (password.text.isNullOrEmpty())
+                password.error = "Please enter a valid password"
+            else if (birthDate.text.isNullOrEmpty())
+                birthDate.error = "Please enter a valid birth date"
+            else if (mobile.text.isValidMobile())
+                mobile.error = "Please enter a valid number"
+            else if (firstName.text.isNullOrEmpty())
+                firstName.error = "Please enter a valid name"
+            else if (!(rbGenderFemale.isChecked || rbGenderMale.isChecked || rbGenderOther.isChecked))
+                tvGender.error = "Please select a gender"
+            else if (email_id.text.isValidEmail())
+                email_id.error = "Please enter a valid email"
+            else if (country.text.isNullOrEmpty())
+                country.error = "Please enter a valid country"
+            else if (zipCode.text.isNullOrEmpty() || !zipCode.text.isDigitsOnly())
+                zipCode.error = "Please enter a valid zip code"
+            else if (state.text.isNullOrEmpty())
+                state.error = "Please enter a valid state"
+            else if (city.text.isNullOrEmpty())
+                city.error = "Please enter a valid city"
+            else {
+                Toast.makeText(context, "Account successfully created", Toast.LENGTH_LONG)
+                    .show()
+                view.findNavController().navigate(SignUpFragmentDirections.signUpToSignIn())
+            }
             lifecycleScope.launchWhenStarted {
                 firebaseAuthenticationManager.createAccount(
-                    emailId.text.toString(),
-                    password.text.toString()
+                    email_id.text.toString(),
+                    password.text.toString(),
+
                 ).collect { result ->
                     when (result) {
                         Result.SUCCESS -> {
@@ -114,55 +161,6 @@ class SignUpFragment : Fragment() {
                         }
                         /*Toast.makeText(context, "Unable to create account", Toast.LENGTH_LONG).show()*/
                     }
-                }
-            }
-
-
-            val name = view.findViewById<EditText>(R.id.name)
-            val password = view.findViewById<EditText>(R.id.password)
-            val mobile = view.findViewById<EditText>(R.id.mobile)
-            val firstName = view.findViewById<EditText>(R.id.firstName)
-            val emailId = view.findViewById<EditText>(R.id.emailId)
-            val country = view.findViewById<EditText>(R.id.country)
-            val zipCode = view.findViewById<EditText>(R.id.zipCode)
-            val state = view.findViewById<EditText>(R.id.state)
-            val city = view.findViewById<EditText>(R.id.city)
-            val googleId = view.findViewById<EditText>(R.id.googleId)
-            val tvGender = view.findViewById<TextView>(R.id.tvGender)
-            val rbGenderFemale = view.findViewById<RadioButton>(R.id.rbGenderFemale)
-            val rbGenderMale = view.findViewById<RadioButton>(R.id.rbGenderMale)
-            val rbGenderOther = view.findViewById<RadioButton>(R.id.rbGenderOther)
-
-            btnSignUp.setOnClickListener {
-
-                if (name.text.isNullOrEmpty())
-                    name.error = "Please enter a valid name"
-                else if (password.text.isNullOrEmpty())
-                    password.error = "Please enter a valid password"
-                else if (birthDate.text.isNullOrEmpty())
-                    birthDate.error = "Please enter a valid birth date"
-                else if (mobile.text.isValidMobile())
-                    mobile.error = "Please enter a valid number"
-                else if (firstName.text.isNullOrEmpty())
-                    firstName.error = "Please enter a valid name"
-                else if (!(rbGenderFemale.isChecked || rbGenderMale.isChecked || rbGenderOther.isChecked))
-                    tvGender.error = "Please select a gender"
-                else if (emailId.text.isValidEmail())
-                    emailId.error = "Please enter a valid email"
-                else if (country.text.isNullOrEmpty())
-                    country.error = "Please enter a valid country"
-                else if (zipCode.text.isNullOrEmpty() || !zipCode.text.isDigitsOnly())
-                    zipCode.error = "Please enter a valid zip code"
-                else if (state.text.isNullOrEmpty())
-                    state.error = "Please enter a valid state"
-                else if (city.text.isNullOrEmpty())
-                    city.error = "Please enter a valid city"
-                else if (googleId.text.isValidEmail())
-                    googleId.error = "Please enter a valid email"
-                else {
-                    Toast.makeText(context, "Account successfully created", Toast.LENGTH_LONG)
-                        .show()
-                    view.findNavController().navigate(SignUpFragmentDirections.signUpToSignIn())
                 }
             }
         }
