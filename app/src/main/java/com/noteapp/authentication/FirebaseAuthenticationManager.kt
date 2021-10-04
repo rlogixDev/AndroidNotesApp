@@ -1,7 +1,11 @@
 package com.noteapp.authentication
 
+import android.util.Log
+import android.widget.Toast
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.noteapp.SignInFragment
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
@@ -46,7 +50,27 @@ class FirebaseAuthenticationManager
         return resultFlow
     }
 
+    override suspend fun firebaseAuthWithGoogle(idToken: String):  Flow<Result> {
+        val resultFlow: MutableStateFlow<Result> = MutableStateFlow(Result.IN_PROGRSS)
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    resultFlow.value = Result.SUCCESS
+                } else {
+                    // If sign in fails, display a message to the user.
+                    resultFlow.value = Result.FAIL
+                }
+            }
+        return resultFlow
+    }
+
     override fun getUserId(): String {
         return auth.currentUser?.uid?:""
+    }
+
+    override fun getUserToken(): String {
+        return auth.currentUser?.tenantId?:""
     }
 }

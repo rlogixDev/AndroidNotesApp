@@ -1,12 +1,15 @@
 package com.noteapp.storage
 
+import android.content.Context
 import android.net.Uri
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import com.noteapp.R
 import com.noteapp.authentication.IFirebaseAuthenticationManager
 import com.noteapp.dataclass.Notes
 import com.noteapp.dataclass.User
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.io.File
@@ -17,10 +20,13 @@ import javax.inject.Singleton
 @Singleton
 class FirebaseStorageManager
 @Inject constructor(
-    private val firebaseAuthenticationManager: IFirebaseAuthenticationManager
+    @ApplicationContext
+    private val context: Context,
+    private val firebaseAuthenticationManager: IFirebaseAuthenticationManager,
 ): IFirebaseStorageManager{
     val database = Firebase.database.reference
     val storageRef = FirebaseStorage.getInstance().reference
+
     companion object {
         public const val DB_USER  = "users"
         public const val DB_NOTES = "notes"
@@ -87,13 +93,13 @@ class FirebaseStorageManager
         return result
     }
 
-    override suspend fun updateNote(note: Notes): Flow<DBResult> {
+    override suspend fun updateNote(note: Map<String, String>, id: String): Flow<DBResult> {
         val result: MutableStateFlow<DBResult> = MutableStateFlow(DBResult.IN_PROGRESS)
         database
             .child(DB_NOTES)
             .child(firebaseAuthenticationManager.getUserId())
-            .child(note.id)
-            .setValue(note)
+            .child(id)
+            .updateChildren(note)
             .addOnSuccessListener {
                 result.value = DBResult.SUCCESS
             }.addOnFailureListener {
@@ -102,17 +108,22 @@ class FirebaseStorageManager
         return result
     }
 
-    override suspend fun uploadImage(file: File, fileName: String): Flow<DBResult> {
-        val result: MutableStateFlow<DBResult> = MutableStateFlow(DBResult.IN_PROGRESS)
+    override suspend fun uploadImage(file: File, fileName: String): Flow<UpladImageResult> {
+        val result: MutableStateFlow<UpladImageResult> = MutableStateFlow(UpladImageResult.InProgress)
         val stream = FileInputStream(file)
         storageRef.child(DB_IMAGE)
             .child(fileName)
             .putStream(stream)
             .addOnSuccessListener {
-                result.value = DBResult.SUCCESS
+
+              storageRef.child(DB_IMAGE)
+                    .child(fileName).downloadUrl.addOnCompleteListener {
+                    val path = it.result.toString()
+                    result.value = UpladImageResult.Success(path)
+                }
             }
             .addOnFailureListener {
-                result.value = DBResult.FAIL
+                result.value = UpladImageResult.Fail
             }
         return result
     }

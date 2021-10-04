@@ -9,7 +9,7 @@
         android:id="@+id/app_logo_splash"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/app_logo"
+        android:src="@drawable/logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -18,7 +18,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="NOTES"
+        android:text=""
         android:textSize="25sp"
         android:textColor="@color/purple_700"
         app:layout_constraintTop_toBottomOf="@+id/app_logo_splash"

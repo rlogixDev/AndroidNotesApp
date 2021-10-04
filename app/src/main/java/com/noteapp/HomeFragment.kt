@@ -8,13 +8,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.noteapp.dataclass.Notes
 import com.noteapp.storage.DBReadResult
 import com.noteapp.storage.IFirebaseStorageManager
+import com.noteapp.viewmodels.NoteDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 import kotlinx.coroutines.flow.collect
@@ -28,12 +31,14 @@ class   HomeFragment : Fragment(R.layout.fragment_home), AdapterView.OnItemSelec
 
     lateinit var notesListAdapter: NotesListAdapter
 
+    private val noteDetailViewModel: NoteDetailViewModel by viewModels()
+
     lateinit var btnDelete: Button
     lateinit var btnEdit: Button
     lateinit var checkboxSelectAll: CheckBox
     lateinit var tvTitle: TextView
     lateinit var etSearch: EditText
-    lateinit var _list: ArrayList<Notes>
+    lateinit var _list: List<Notes>
     lateinit var ivDelete: ImageView
 
     override fun onCreateView(
@@ -65,7 +70,9 @@ class   HomeFragment : Fragment(R.layout.fragment_home), AdapterView.OnItemSelec
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val itemOnClick: (View, Int) -> Unit = { view, position ->
-            Toast.makeText(context, "Item: $position", Toast.LENGTH_SHORT).show()
+            noteDetailViewModel.setIsNotesEditable(false)
+            noteDetailViewModel.setNoteDetail(notesListAdapter.getList()[position])
+            findNavController().navigate(HomeFragmentDirections.homeToEditNote())
         }
 
         btnDelete = view.findViewById(R.id.btnDelete)
@@ -86,6 +93,14 @@ class   HomeFragment : Fragment(R.layout.fragment_home), AdapterView.OnItemSelec
                 }
             }
             loadData()
+        }
+
+        btnEdit.setOnClickListener {
+            notesListAdapter.getList().first { it.isSelected }?.let { note->
+                noteDetailViewModel.setIsNotesEditable(true)
+                noteDetailViewModel.setNoteDetail(note)
+                findNavController().navigate(HomeFragmentDirections.homeToEditNote())
+            }
         }
 
         tvTitle.setOnClickListener {
@@ -146,6 +161,8 @@ class   HomeFragment : Fragment(R.layout.fragment_home), AdapterView.OnItemSelec
         //Edit Note
         val createNewNote = view.findViewById<FloatingActionButton>(R.id.createNewNote)
         createNewNote.setOnClickListener {
+            noteDetailViewModel.setIsNotesEditable(true)
+            noteDetailViewModel.setNoteDetail(null)
             view.findNavController().navigate(HomeFragmentDirections.homeToEditNote())
         }
 
@@ -176,11 +193,10 @@ class   HomeFragment : Fragment(R.layout.fragment_home), AdapterView.OnItemSelec
                                 val details = map["details"] ?: ""
                                 val date = map["date"] ?: ""
                                 val imagePath = map["imagePath"] ?: ""
-
-                                list.add(let { Notes(key, "", title, details, date, imagePath) })
+                                list.add(let { Notes(key, title, details, date, imagePath) })
                             }
-                            _list = list
-                            notesListAdapter?.refreshData(list)
+                            _list = list.sortedBy {it.date}
+                            notesListAdapter?.refreshData(_list)
                         }
                     }
                     else -> Log.i("Home", "No action needed")
@@ -192,19 +208,16 @@ class   HomeFragment : Fragment(R.layout.fragment_home), AdapterView.OnItemSelec
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         when(p2) {
             0-> {
-                val list = notesListAdapter.getList().sortedBy {
-                    it.title
-                }
+                val list = notesListAdapter.getList()
+                    .sortedBy {it.title}
                 notesListAdapter.refreshData(list)
             }
             1-> {
-                val list = notesListAdapter.getList().sortedByDescending {
-                    it.title
-                }
+                val list = notesListAdapter.getList()
+                    .sortedByDescending {it.title}
                 notesListAdapter.refreshData(list)
             }
         }
-
     }
 
     override fun onNothingSelected(p0: AdapterView<*>?) {

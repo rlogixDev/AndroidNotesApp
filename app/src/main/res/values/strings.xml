@@ -8,4 +8,6 @@
         <item>Z-A</item>
 
     </string-array>
+
+    <string name="image_download_base_path">https://firebasestorage.googleapis.com/v0/b/rlogixnoteapp.appspot.com/o/images%1$S?alt=media&amp;token=%2$s</string>
 </resources>

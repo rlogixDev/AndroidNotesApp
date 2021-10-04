@@ -13,18 +13,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.noteapp.dataclass.Notes
 import com.noteapp.storage.DBResult
 import com.noteapp.storage.IFirebaseStorageManager
+import com.noteapp.storage.UpladImageResult
+import com.noteapp.viewmodels.NoteDetailViewModel
+import com.squareup.picasso.Picasso
 import com.test.notes.AlertDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -46,11 +48,15 @@ class EditNoteFragment : Fragment() {
     lateinit var addImage: Button
     lateinit var edit_note_image: ImageView
     lateinit var btnEditNote: Button
+    lateinit var btnDeleteNote: Button
 
     private lateinit var photoFile: File
     val CAPTURE_IMAGE_REQUEST = 1
     private var mCurrentPhotoPath: String = ""
-    private var imagePath = "https://media.geeksforgeeks.org/wp-content/uploads/20210101144014/gfglogo.png"
+    private var imagePath = ""
+    lateinit var progress: ProgressBar
+
+    private val noteDetailViewModel: NoteDetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,43 +78,38 @@ class EditNoteFragment : Fragment() {
         addImage = view.findViewById<Button>(R.id.addImage)
         edit_note_image = view.findViewById<ImageView>(R.id.edit_note_image)
         btnEditNote = view.findViewById<Button>(R.id.btnEditNote)
-
-        val requestPermissionLauncher =
-            registerForActivityResult(
-                ActivityResultContracts.RequestPermission()
-            ) { isGranted: Boolean ->
-                if (isGranted) {
-                    startCamera()
-                } else {
-                    showErrorMessage("Camera permission is not allowed.")
-                }
-            }
+        btnDeleteNote = view.findViewById<Button>(R.id.btnDeleteNote)
+        progress =  view.findViewById<ProgressBar>(R.id.progress)
 
         addImage.setOnClickListener {
-            when {
-                ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.CAMERA
-                ) == PackageManager.PERMISSION_GRANTED -> {
-                    startCamera()
-                }
-                /*shouldShowRequestPermissionRationale(...) -> {
-                // In an educational UI, explain to the user why your app requires this
-                // permission for a specific feature to behave as expected. In this UI,
-                // include a "cancel" or "no thanks" button that allows the user to
-                // continue using your app without granting the permission.
-                showInContextUI(...)
-            }*/
-                else -> {
-                    // You can directly ask for the permission.
-                    // The registered ActivityResultCallback gets the result of this request.
-                    requestPermissionLauncher.launch(
-                        Manifest.permission.ACCESS_FINE_LOCATION)
-                }
-            }
+            checkPermissions()
         }
         //Note Details Page
         btnEditNote.setOnClickListener { mView->
+            if(noteDetailViewModel.noteDetailFlow.value != null) {
+                lifecycleScope.launch {
+                    val map: Map<String, String> = mapOf("title" to note_title.text.toString(),
+                        "date" to getCurrentDateTime(),
+                    "imagePath" to imagePath,
+                    "details" to  edit_note_details.text.toString())
+                    firebaseStorageManager
+                        .updateNote(map,
+                        noteDetailViewModel.noteDetailFlow.value!!.id)
+                        .collect { dbResult->
+                            when(dbResult) {
+                                DBResult.IN_PROGRESS -> progress.visibility = View.VISIBLE
+                                DBResult.FAIL -> {
+                                    progress.visibility = View.GONE
+                                    showErrorMessage("Unable to update note")
+                                }
+                                DBResult.SUCCESS -> {
+                                    progress.visibility = View.GONE
+                                    findNavController().popBackStack()
+                                }
+                            }
+                        }
+                }
+            }
             if(note_title.text.isEmpty())
                 showErrorMessage("Please enter note title.")
             else if(edit_note_details.text.isEmpty())
@@ -118,11 +119,78 @@ class EditNoteFragment : Fragment() {
             else {
                 lifecycleScope.launch {
                     firebaseStorageManager
-                        .createNote(Notes("", "", note_title.text.toString(),
-                            edit_note_details.text.toString(), "2021-10-01",imagePath))
+                        .createNote(Notes("", note_title.text.toString(),
+                            edit_note_details.text.toString(), getCurrentDateTime(),imagePath))
                         .collect { dbResult->
-                            mView.findNavController().popBackStack()
+                            when(dbResult) {
+                                DBResult.IN_PROGRESS -> progress.visibility = View.VISIBLE
+                                DBResult.FAIL -> {
+                                    progress.visibility = View.GONE
+                                    showErrorMessage("Unable to creat note")
+                                }
+                                DBResult.SUCCESS -> {
+                                    progress.visibility = View.GONE
+                                    findNavController().popBackStack()
+                                }
+                            }
                         }
+                }
+            }
+        }
+
+        btnDeleteNote.setOnClickListener {
+            lifecycleScope.launch {
+                firebaseStorageManager
+                    .deleteNote(noteDetailViewModel.noteDetailFlow.value!!)
+                    .collect { dbResult->
+                        when(dbResult) {
+                            DBResult.IN_PROGRESS -> progress.visibility = View.VISIBLE
+                            DBResult.FAIL -> {
+                                progress.visibility = View.GONE
+                                showErrorMessage("Unable to delete note")
+                            }
+                            DBResult.SUCCESS -> {
+                                progress.visibility = View.GONE
+                                findNavController().popBackStack()
+                            }
+                        }
+                    }
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            noteDetailViewModel.noteDetailFlow.collect { note->
+                if(note != null) {
+                    note_title.setText(note.title)
+                    edit_note_details.setText(note.details)
+                    Picasso.get()
+                        .load(note.imagePath)
+                        .into(edit_note_image)
+                    imagePath = note.imagePath
+
+                    if(noteDetailViewModel.isNotesEditable.value)
+                        btnDeleteNote.visibility = View.VISIBLE
+                    else
+                        btnDeleteNote.visibility = View.GONE
+                }
+                else
+                    btnDeleteNote.visibility = View.GONE
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            noteDetailViewModel.isNotesEditable.collect {
+                if(it) {
+                    note_title.isEnabled = true
+                    edit_note_details.isEnabled = true
+                    addImage.visibility = View.VISIBLE
+                    btnEditNote.visibility = View.VISIBLE
+                }
+                else {
+                    note_title.isEnabled = false
+                    edit_note_details.isEnabled = false
+                    addImage.visibility = View.GONE
+                    btnEditNote.visibility = View.GONE
                 }
             }
         }
@@ -187,13 +255,63 @@ class EditNoteFragment : Fragment() {
                 val fileName = System.currentTimeMillis().toString()
                 firebaseStorageManager.uploadImage(photoFile!!, fileName).collect {
                     when(it) {
-                        DBResult.SUCCESS -> imagePath = ""//firebaseStorageManager.getImagePath(fileName)
-                        DBResult.FAIL -> showErrorMessage("Unable to upload image")
+                        is UpladImageResult.InProgress -> progress.visibility = View.VISIBLE
+                        is UpladImageResult.Success -> {
+                            progress.visibility = View.GONE
+                            imagePath = it.path
+                        }
+                        UpladImageResult.Fail -> {
+                            progress.visibility = View.GONE
+                            showErrorMessage("Unable to upload image")
+                        }
                     }
                 }
             }
         } else {
             // displayMessage(baseContext, "Request cancelled or something went wrong.")
         }
+    }
+
+    val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                checkPermissions()
+            } else {
+                showErrorMessage("Camera permission is not allowed.")
+            }
+        }
+
+    private fun checkPermissions() {
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+                    &&
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+            -> {
+                startCamera()
+            }
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED -> requestPermissionLauncher.launch(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            else -> {
+                requestPermissionLauncher.launch(
+                    Manifest.permission.CAMERA)
+            }
+        }
+    }
+
+    private fun getCurrentDateTime(): String {
+        val currentTime = Calendar.getInstance().time
+        val dateFormatter = SimpleDateFormat("yyyy-mm-dd'T'hh:mm:ss")
+        return dateFormatter.format(currentTime)
     }
 }
