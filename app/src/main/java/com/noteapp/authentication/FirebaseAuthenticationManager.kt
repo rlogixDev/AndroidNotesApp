@@ -25,6 +25,10 @@ class FirebaseAuthenticationManager
                 else->resultFlow.value = Result.FAIL
             }
         }
+            .addOnFailureListener {
+                Log.e("Create Account Exception", it.message.toString())
+            }
+
         return resultFlow
     }
 

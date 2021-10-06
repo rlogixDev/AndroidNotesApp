@@ -31,8 +31,7 @@ import javax.inject.Inject
 import java.util.*
 import kotlin.collections.ArrayList
 import android.widget.ArrayAdapter
-
-
+import androidx.navigation.fragment.findNavController
 
 
 @AndroidEntryPoint
@@ -76,6 +75,12 @@ class SignUpFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val alreadyAnAccount = view.findViewById<TextView>(R.id.alreadyAnAccount)
+        alreadyAnAccount.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         password = view.findViewById<EditText>(R.id.password)
         mobile = view.findViewById<EditText>(R.id.mobile)
         firstName = view.findViewById<EditText>(R.id.firstName)

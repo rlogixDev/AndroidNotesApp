@@ -69,7 +69,7 @@
         android:id="@+id/email_mobile"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:hint="Email/Mobile"
+        android:hint="Email"
         android:textSize="15sp"
         android:textColor="@color/purple_700"
         app:layout_constraintTop_toBottomOf="@id/tv_or"
