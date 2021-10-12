@@ -130,6 +130,7 @@ class SignInFragment : Fragment() {
         btnSignIn.setOnClickListener {
             lifecycleScope.launchWhenStarted {
                 firebaseAuthenticationManager.login(email_mobile.text.toString(), sign_in_password.text.toString()).collect {result->
+                    Log.e("SIGN IN ERROR RESULT"+ result,"")
                     when(result){
                         Result.SUCCESS-> {
 
@@ -146,12 +147,6 @@ class SignInFragment : Fragment() {
                 }
             }
 
-            if (!(email_mobile.text.isValidEmail() || email_mobile.text.isValidMobile()))
-                sign_in_password.error = "Invalid input!"
-            else if (sign_in_password.text.isNullOrEmpty())
-                sign_in_password.error = "Incorrect password!"
-            else
-                view.findNavController().navigate(SignInFragmentDirections.signInToHome())
         }
 
         //Forgot Password Page
